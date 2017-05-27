@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>
+		<%= title %>
+	</title>
+	<script src="https://use.fontawesome.com/d64ac3c306.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	 crossorigin="anonymous">
+	<link rel="stylesheet" href="https://necolas.github.io/normalize.css/7.0.0/normalize.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.4/sweetalert2.min.css" integrity="sha256-zgaKkhKpXzSrPyXVfczHhygcPSHyhHD+PSWnq3LZHHs="
+	 crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.4/sweetalert2.min.js" integrity="sha256-ekbnNY56NMALfM+xMBTe2rJkzgVCnmvJUUsKazZQQT8="
+	 crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/javascripts/scripts.js"></script>
+</head>
+
+<body>
+	<div id="reg-page">
+		<div class="container">
+			<form class="form-signin">
+				<h2 class="form-signin-heading">Please sign in to chat</h2>
+				<label for="reg-username" class="sr-only">Username</label>
+				<input id="reg-username" type="text" class="form-control" placeholder="Username" required autofocus data-placement="left" title="Please input username!">
+				<button id="reg-btn" class="btn btn-lg btn-primary btn-block" type="submit" style="margin-top:10px;">Sign in</button>
+			</form>
+		</div>
+	</div>
+
+	<div id="chat-page" class="row" style="margin:0;display:none;">
+		<div class="row">
+			<div id="logout" class="pull-right" style="margin-right:15px;">
+				Hi, <span id="currentUserName"></span>
+				<button class="btn btn-danger" type="submit" id="logout-btn" style="margin-left:10px;">Logout</button>
+			</div>
+		</div>
+		<div class="col-sm-2" id="ccu" style="background-color: #d9dce0;padding:0;">
+			<p class="text-center bg-primary" style="padding: 15px 0;border: solid 1px silver;margin-bottom:0px;">Concurrent Users</p>
+		</div>
+		<div class="col-sm-10" id="chatbox" style="padding:0;">
+			<div class="row" id="chatlog" style="background-color:#efffbf;margin:0;"></div>
+			<div class="row" id="inputform" style="margin:0;">
+				<div class="col-sm-11" style="padding:0;">
+					<input id="msg-input" type="text" name="input" placeholder="Input message here!" style="width:100%;font-size:20px !important;" style="margin:0px;padding:0px;font-size:30px;"
+					 class="form-control input-lg" data-toggle="tooltip" data-placement="left" title="Please input message!">
+				</div>
+				<div class="col-sm-1" style="padding:0;">
+					<button type="submit" style="width:100%;" style="margin:0px;padding:0px;" class="btn btn-primary btn-lg" id='msg-btn'>Send</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

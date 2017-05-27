@@ -1,5 +1,5 @@
 //socket.io script
-var socket = io('http://127.0.0.1:3000');
+var socket = io();
 socket.on('server-send-reg-result', function (data) {
     if (!data) {
         swal('Something wrong', 'The username has been used!', 'error');

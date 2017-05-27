@@ -62,7 +62,7 @@ app.io.on('connection', function (socket) {
 
   socket.on('client-send-logout', function (data) {
     CCUs.splice(CCUs.indexOf(data), 1);
-    socket.broadcast.emit('server-broadcast-logout-info', CCUs);
+    socket.broadcast.emit('server-broadcast-logout-info', {ccu:CCUs,user:data});
   });
 
   socket.on('client-send-chat-msg', function (data) {

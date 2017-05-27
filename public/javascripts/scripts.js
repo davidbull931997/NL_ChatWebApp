@@ -15,6 +15,7 @@ socket.on('server-send-reg-result', function (data) {
         $('#reg-page').fadeOut();
         setTimeout(function () {
             $('#chat-page').fadeIn();
+            //fix chat page
             $('#ccu').height(($(window).height() - $('div#logout').height()));
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
             $('#chatlog').height($('#chatbox').height() * 95 / 100);
@@ -25,7 +26,7 @@ socket.on('server-send-reg-result', function (data) {
 
 socket.on('server-send-updated-cculist', function (data) {
     $('#ccu > p').each(function (index, element) {
-        if (index != 0) {
+        if (index > 0) {
             $(element).remove();
         }
     });
@@ -35,13 +36,21 @@ socket.on('server-send-updated-cculist', function (data) {
 });
 
 socket.on('server-broadcast-logout-info', function (data) {
+    // $('#ccu > p').each(function (index, element) {
+    //     if (index != 0) {
+    //         $(element).remove();
+    //     }
+    // });
+    // $.each(data, function (index, item) {
+    //     $('#ccu').append('<p class="text-center bg-info" style="padding: 10px 0;border: solid 1px silver;border-radius:2px;margin-bottom:0px;">' + item + '</p>');
+    // });
     $('#ccu > p').each(function (index, element) {
-        if (index != 0) {
-            $(element).remove();
+        if (index > 0) {//ignore title element
+            if($(element).text()==data.user){
+                $(element).remove();
+                return false;
+            }
         }
-    });
-    $.each(data, function (index, item) {
-        $('#ccu').append('<p class="text-center bg-info" style="padding: 10px 0;border: solid 1px silver;border-radius:2px;margin-bottom:0px;">' + item + '</p>');
     });
 });
 

@@ -1,5 +1,13 @@
 //socket.io script
 var socket = io();
+
+socket.on('disconnect', function (attempt) {
+    socket.close();
+    swal('Disconnected', 'Disconnected from server, the server was offline', 'error').then(function () {
+        window.location.href = 'about:blank';
+    });
+});
+
 socket.on('server-send-reg-result', function (data) {
     if (!data) {
         swal('Something wrong', 'The username has been used!', 'error');
@@ -39,13 +47,6 @@ socket.on('server-broadcast-logout-info', function (data) {
 
 socket.on('server-broadcast-chat-msg', function (data) {
     $('#chatlog').append('<p style="padding: 5px 0;margin:0 0 0 10px;font-size:25px;">' + data.user + ': ' + data.msg + '</p>');
-});
-
-socket.on('server-on-close', function () {
-    socket.close();
-    swal('Disconnected', 'Disconnected from server, the server was offline', 'error').then(function () {
-        window.location.href = 'about:blank';
-    });
 });
 
 $(function () {

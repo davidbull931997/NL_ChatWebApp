@@ -68,26 +68,6 @@ app.io.on('connection', function (socket) {
   socket.on('client-send-chat-msg', function (data) {
     app.io.sockets.emit('server-broadcast-chat-msg', data);
   });
-
-  //Exit nodeJS event
-  process.on('exit', code => {
-    app.io.sockets.emit('server-on-close');
-    Object.keys(app.io.sockets.sockets).forEach(function (s) {
-      app.io.sockets.sockets[s].disconnect(true);
-    });
-    app.io.close();
-    process.exit (code);
-  });
-
-  // Catch CTRL+C
-  process.on('SIGINT', () => {
-    app.io.sockets.emit('server-on-close');
-    Object.keys(app.io.sockets.sockets).forEach(function (s) {
-      app.io.sockets.sockets[s].disconnect(true);
-    });
-    app.io.close();
-    process.exit (0);
-  });
 });
 
 module.exports = app;

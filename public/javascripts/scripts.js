@@ -1,11 +1,21 @@
 //socket.io script
 var socket = io();
 
-socket.on('disconnect', function (attempt) {
-    socket.close();
-    swal('Disconnected', 'Disconnected from server, the server was offline', 'error').then(function () {
+socket.on('disconnect', function () {
+    swal({
+        title: 'Disconnected',
+        text: 'Disconnected from server',
+        type: 'error',
+        allowOutsideClick: false
+    }).then(function () {
         window.location.href = 'about:blank';
     });
+});
+
+socket.on('reconnecting', attempt => {
+    if (attempt > 3) {
+        socket.close();
+    }
 });
 
 socket.on('server-send-reg-result', function (data) {
@@ -18,8 +28,10 @@ socket.on('server-send-reg-result', function (data) {
             //fix chat page
             $('#ccu').height(($(window).height() - $('div#logout').height()));
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
-            $('#chatlog').height($('#chatbox').height() * 95 / 100);
-            $('#inputform').height($('#chatbox').height() * 5 / 100);
+            $('#chatlog').height(($('#chatbox').height() * 96 / 100) - 6);
+            $('#msg-btn').height($('#chatbox').height() * 4 / 100);
+            $('#msg-input').height($('#chatbox').height() * 4 / 100);
+            $('#msg-input').css('font-size', $('#msg-input').height() - 5 + 'px');
         }, 401);
     }
 });
@@ -31,22 +43,14 @@ socket.on('server-send-updated-cculist', function (data) {
         }
     });
     $.each(data, function (index, item) {
-        $('#ccu').append('<p class="text-center bg-info" style="padding: 10px 0;border: solid 1px silver;border-radius:2px;margin-bottom:0px;">' + item + '</p>');
+        $('#ccu').append('<p class="text-center bg-info" style="padding: 10px 0;border: solid 1px silver;border-radius:2px;margin-bottom:0px;word-wrap:break-word;">' + item + '</p>');
     });
 });
 
 socket.on('server-broadcast-logout-info', function (data) {
-    // $('#ccu > p').each(function (index, element) {
-    //     if (index != 0) {
-    //         $(element).remove();
-    //     }
-    // });
-    // $.each(data, function (index, item) {
-    //     $('#ccu').append('<p class="text-center bg-info" style="padding: 10px 0;border: solid 1px silver;border-radius:2px;margin-bottom:0px;">' + item + '</p>');
-    // });
     $('#ccu > p').each(function (index, element) {
         if (index > 0) {//ignore title element
-            if($(element).text()==data.user){
+            if ($(element).text() == data.user) {
                 $(element).remove();
                 return false;
             }
@@ -55,7 +59,9 @@ socket.on('server-broadcast-logout-info', function (data) {
 });
 
 socket.on('server-broadcast-chat-msg', function (data) {
-    $('#chatlog').append('<p style="padding: 5px 0;margin:0 0 0 10px;font-size:25px;">' + data.user + ': ' + data.msg + '</p>');
+    $('#chatlog').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;">' + data.user + ': ' + data.msg + '</p>');
+    var chatlog = document.getElementById('chatlog');
+    if (chatlog.clientHeight < chatlog.scrollHeight) chatlog.scrollTop = chatlog.scrollHeight;
 });
 
 $(function () {
@@ -64,7 +70,6 @@ $(function () {
     $(window).on('beforeunload', function () {
         socket.emit('client-send-logout', $('#currentUserName').text());
     });
-
 
     //reg page
     $('#reg-btn').click(function () {
@@ -139,14 +144,12 @@ $(function () {
 
     });
 
-    $('#ccu').height(($(window).height() - $('div#logout').height()));
-    $('#chatbox').height(($(window).height() - $('div#logout').height()));
-    $('#chatlog').height($('#chatbox').height() * 95 / 100);
-    $('#inputform').height($('#chatbox').height() * 5 / 100);
     $(window).resize(function () {
         $('#ccu').height(($(window).height() - $('div#logout').height()));
         $('#chatbox').height(($(window).height() - $('div#logout').height()));
-        $('#chatlog').height($('#chatbox').height() * 95 / 100);
-        $('#inputform').height($('#chatbox').height() * 5 / 100);
+        $('#chatlog').height(($('#chatbox').height() * 96 / 100) - 6);
+        $('#msg-btn').height($('#chatbox').height() * 4 / 100);
+        $('#msg-input').height($('#chatbox').height() * 4 / 100);
+        $('#msg-input').css('font-size', $('#msg-input').height() - 10 + 'px');
     });
 });

@@ -12,10 +12,14 @@
     "ejs": "~2.5.6",
     "express": "~4.15.2",
     "morgan": "~1.8.1",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "spdy": "^3.4.7"
   },
   "engines": {
     "node": "7.10.0"
   },
-  "keywords": ["example", "heroku"]
+  "keywords": [
+    "example",
+    "heroku"
+  ]
 }

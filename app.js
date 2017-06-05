@@ -54,7 +54,7 @@ app.io.on('connection', function (socket) {
     console.log('Client disconnected - socketId: ' + socket.id);
     if (CCUs.indexOf(socket.username) >= 0) {
       CCUs.splice(CCUs.indexOf(socket.username), 1);
-      socket.broadcast.emit('server-broadcast-logout-info', { ccu: CCUs, user: socket.username });
+      app.io.sockets.emit('server-send-logout-info', socket.username);
     }
   });
 
@@ -65,17 +65,17 @@ app.io.on('connection', function (socket) {
       socket.username = data;
       CCUs.push(data);
       socket.emit('server-send-reg-result', true);
-      app.io.sockets.emit('server-send-updated-cculist', CCUs);
+      app.io.sockets.emit('server-updated-cculist', {ccu:CCUs, user:data});
     }
   });
 
   socket.on('client-send-logout', function (data) {
     CCUs.splice(CCUs.indexOf(data), 1);
-    socket.broadcast.emit('server-broadcast-logout-info', { ccu: CCUs, user: data });
+    app.io.sockets.emit('server-send-logout-info', data);
   });
 
   socket.on('client-send-chat-msg', function (data) {
-    app.io.sockets.emit('server-broadcast-chat-msg', data);
+    app.io.sockets.emit('server-send-msg', data);
   });
 });
 

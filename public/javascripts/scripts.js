@@ -36,20 +36,27 @@ socket.on('server-send-reg-result', function (data) {
             $('#msg-btn').height($('#chatbox').height() * 3 / 100);
             $('#msg-input').height($('#chatbox').height() * 3 / 100);
             $('#msg-input').css('font-size', $('#msg-input').height() - 7 + 'px');
+            $('div#tools.pull-right').css('margin', () => $('div#nav-bar.row').height() / 2 - $('div#tools.pull-right > a.tools').height() / 2 + 'px 10px 0 0px');
+            $('div#tools.pull-right > a').each((index, element) => {
+                if (index != $('div#tools.pull-right > a.tools').length - 1) {
+                    $(element).css('margin-right', '10px');
+                }
+            });
         }, 401);
     }
 });
 
 socket.on('server-updated-cculist', function (data) {
+    console.log(data.user);
+    console.log(data.ccu);
     $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item').remove();
     $.each(data.ccu, function (index, item) {
-        $('div#ccu > div.panel.panel-default > ul.list-group').append('<li class="list-group-item" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
+        $('div#ccu > div.panel.panel-default > ul.list-group').append('<li class="list-group-item" style="word-wrap:break-word;" data-username="' + he.encode(item) + '">' + he.encode(item) + '</li>');
         if (item == data.user) {
             $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"').addClass('animated bounceInLeft');
         };
     });
     if ($('#chat-page').css('display') != 'none') {
-        
         setTimeout(function () {
             audio.in.play();
         }, 500);
@@ -63,16 +70,16 @@ socket.on('server-send-logout-info', function (data) {
             $(element).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
                 $(element).remove();
             });
+            if ($('#chat-page').css('display') != 'none') {
+                audio.out.play();
+            }
             return false;
         }
     });
-    if ($('#chat-page').css('display') != 'none') {
-        audio.out.play();
-    }
 });
 
 socket.on('server-send-msg', function (data) {
-    $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span>: ' + data.msg + '</p>');
+    $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + he.encode(data.user) + '</span>: ' + he.encode(data.msg) + '</p>');
     if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
         audio.msg.play();
     }
@@ -92,6 +99,11 @@ $(function () {
 
     //set #reg-page to middle of browser
     $('#reg-page').css('margin-top', ($(window).height() / 2) - ($('#reg-page').height() / 2));
+    //fix for a.tools
+    $('div#tools.pull-right > a.tools').css({
+        'color': 'black',
+        'text-decoration': 'none'
+    });
 
     $('#chatlog').mCustomScrollbar({
         axis: 'y',
@@ -111,13 +123,14 @@ $(function () {
     //tooltip
     $('#reg-username').tooltip({ trigger: 'manual' });
     $('[data-toggle="tooltip"]').tooltip({ trigger: 'manual' });
+    $('.tools').tooltip({ trigger: 'hover' });
 
     //trigger when user close/reload/etc web
     $(window).on('beforeunload', function () {
-        if($('#chat-page').css('display')!='none') socket.emit('client-send-logout', $('#currentUserName').text());
+        if ($('#chat-page').css('display') != 'none') socket.emit('client-send-logout', $('#currentUserName').text());
     });
 
-    //reg page
+    //==================reg page
     $('#reg-btn').click(function () {
         if ($('#reg-username').val() == '') {
             $('#reg-username').attr('data-original-title', 'Please input username!');
@@ -134,8 +147,9 @@ $(function () {
             }, 2000);
         }
         else {
-            socket.emit('client-send-reg-info', $('#reg-username').val());
-            $('#currentUserName').text($('#reg-username').val());
+            let encodedInput = he.encode($('#reg-username').val());
+            socket.emit('client-send-reg-info', encodedInput);
+            $('#currentUserName').text(encodedInput);
             $('#msg-input').focus();
             $('#chatlog > div > div#mCSB_1_container').html('');
         }
@@ -150,16 +164,34 @@ $(function () {
                     $('#reg-username').tooltip('hide');
                 }, 2000);
             }
+            else if ($('#reg-username').val().length > 20) {
+                $('#reg-username').attr('data-original-title', 'Username must less than 20 character');
+                $('#reg-username').tooltip('show');
+                setTimeout(function () {
+                    $('#reg-username').tooltip('hide');
+                }, 2000);
+            }
             else {
-                socket.emit('client-send-reg-info', $('#reg-username').val());
-                $('#currentUserName').text($('#reg-username').val());
+                let encodedInput = he.encode($('#reg-username').val());
+                socket.emit('client-send-reg-info', encodedInput);
+                $('#currentUserName').text(encodedInput);
                 $('#msg-input').focus();
             }
             return false;
         }
     });
 
-    //chatting page
+    //==================chatting page
+    //clear # href
+    $('a.tools').click((e) => e.preventDefault());
+    //trigger when user click canvas icon
+    $('a#canvas-icon.tools').click(() => {
+        if ($('div#private-chat-page').css('display') != 'none') {
+
+        }
+    });
+
+    //trigger when user click logout button
     $('#logout-btn').click(function () {
         $('#chat-page').fadeOut();
         setTimeout(function () {
@@ -169,6 +201,7 @@ $(function () {
         return false;
     });
 
+    //trigger when user click send msg button
     $('#msg-btn').click(function () {
         if ($('#msg-input').val() == '') {
             $('[data-toggle="tooltip"]').tooltip('show');
@@ -176,12 +209,14 @@ $(function () {
                 $('[data-toggle="tooltip"]').tooltip('hide');
             }, 2000);
         } else {
-            socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: $('#msg-input').val() });
+            let encodedInput = he.encode($('#msg-input').val());
+            socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedInput });
             $('#msg-input').val('');
         }
         return false;
     });
 
+    //trigger when user press enter key
     $("#msg-input").on('keydown', function (e) {
         if (e.keyCode == 13) {
             if ($('#msg-input').val() == '') {
@@ -190,7 +225,8 @@ $(function () {
                     $('[data-toggle="tooltip"]').tooltip('hide');
                 }, 2000);
             } else {
-                socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: $('#msg-input').val() });
+                let encodedInput = he.encode($('#msg-input').val());
+                socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedInput });
                 $('#msg-input').val('');
             }
             return false;

@@ -17,25 +17,31 @@
 	 crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
 	 crossorigin="anonymous">
-	 <!-- Normalize.css -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" integrity="sha256-HxaKz5E/eBbvhGMNwhWRPrAR9i/lG1JeT4mD6hCQ7s4=" crossorigin="anonymous" />
+	<!-- Normalize.css -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" integrity="sha256-HxaKz5E/eBbvhGMNwhWRPrAR9i/lG1JeT4mD6hCQ7s4="
+	 crossorigin="anonymous" />
 	<!-- SweetAlert 2 -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.4/sweetalert2.min.css" integrity="sha256-zgaKkhKpXzSrPyXVfczHhygcPSHyhHD+PSWnq3LZHHs="
 	 crossorigin="anonymous" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.4/sweetalert2.min.js" integrity="sha256-ekbnNY56NMALfM+xMBTe2rJkzgVCnmvJUUsKazZQQT8="
 	 crossorigin="anonymous"></script>
-	 <!-- Animate -->
-	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" integrity="sha256-j+P6EZJVrbXgwSR5Mx+eCS6FvP9Wq27MBRC/ogVriY0=" crossorigin="anonymous" />
-	 <!-- Custom scrollbar library (mCustomScrollbar) -->
-	<script src="https://cdn.jsdelivr.net/jquery.mcustomscrollbar/3.1.5/jquery.mCustomScrollbar.min.js" integrity="sha256-bjm6T61ueH+TXzPqjayRBbE4TK4lBBoSvBCIBchlmPs=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.mcustomscrollbar/3.1.5/jquery.mCustomScrollbar.min.css" integrity="sha256-JHGEmB629pipTkMag9aMaw32I8zle24p3FpsEeI6oZU=" crossorigin="anonymous">
+	<!-- Animate -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" integrity="sha256-j+P6EZJVrbXgwSR5Mx+eCS6FvP9Wq27MBRC/ogVriY0="
+	 crossorigin="anonymous" />
+	<!-- Custom scrollbar library (mCustomScrollbar) -->
+	<script src="https://cdn.jsdelivr.net/jquery.mcustomscrollbar/3.1.5/jquery.mCustomScrollbar.min.js" integrity="sha256-bjm6T61ueH+TXzPqjayRBbE4TK4lBBoSvBCIBchlmPs="
+	 crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.mcustomscrollbar/3.1.5/jquery.mCustomScrollbar.min.css" integrity="sha256-JHGEmB629pipTkMag9aMaw32I8zle24p3FpsEeI6oZU="
+	 crossorigin="anonymous">
 
 	<!-- Private CSS & JS -->
+	<script src="/javascripts/he.js"></script>
 	<link rel="stylesheet" href="/stylesheets/style.css">
 	<script src="/javascripts/scripts.js"></script>
 </head>
 
 <body>
+	<!-- Registration page -->
 	<div id="reg-page" class="container">
 		<div class="col-xs-12">
 			<form class="form-signin">
@@ -49,11 +55,18 @@
 		</div>
 	</div>
 
+	<!-- Public Chatting page -->
 	<div id="chat-page" class="row" style="margin:0;display:none;">
-		<div class="row" style="margin: 0;padding:0;">
-			<div id="logout" class="pull-right">
+		<div id="nav-bar" class="row" style="margin: 0;padding:0;">
+			<div id="logout" class="pull-right" style="padding-left:5px;border-left:1px solid black;">
 				Hi, <span id="currentUserName"></span>
 				<button class="btn btn-danger" type="submit" id="logout-btn" style="margin-left:10px;">Logout</button>
+			</div>
+			<div id="tools" class="pull-right">
+				<a href="#" id="canvas-icon" class="tools fa fa-pencil-square-o fa-lg" aria-hidden="true" title="Only available in private chat"
+				 data-placement="bottom"></a>
+				<a href="#" id="webrtc-icon" class="tools fa fa-video-camera fa-lg" aria-hidden="true" title="Only available in private chat"
+				 data-placement="bottom"></a>
 			</div>
 		</div>
 		<div class="col-xs-3 col-sm-2" id="ccu" style="background-color: #d9dce0;padding:0;">
@@ -80,6 +93,11 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<!-- Private chatting -->
+	<div id="private-chat-page" style="display:none;">
+
 	</div>
 </body>
 

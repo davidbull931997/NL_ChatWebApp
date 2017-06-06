@@ -1,6 +1,10 @@
 //socket.io script
 var socket = io();
-
+const audio = {
+    in: new Audio('/sounds/capisci.mp3'),
+    out: new Audio('/sounds/out.mp3'),
+    msg: new Audio('/sounds/thegertz.wav')
+};
 socket.on('disconnect', function () {
     swal({
         title: 'Disconnected',
@@ -45,9 +49,9 @@ socket.on('server-updated-cculist', function (data) {
         };
     });
     if ($('#chat-page').css('display') != 'none') {
-        let sound = new Audio('/sounds/capisci.mp3');
+        
         setTimeout(function () {
-            sound.play();
+            audio.in.play();
         }, 500);
     }
 });
@@ -63,16 +67,14 @@ socket.on('server-send-logout-info', function (data) {
         }
     });
     if ($('#chat-page').css('display') != 'none') {
-        let sound = new Audio('/sounds/out2.aac');
-        sound.play();
+        audio.out.play();
     }
 });
 
 socket.on('server-send-msg', function (data) {
     $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span>: ' + data.msg + '</p>');
     if ($('#chat-page').css('display') != 'none') {
-        let sound = new Audio('/sounds/thegertz.wav');
-        sound.play();
+        audio.msg.play();
     }
 });
 

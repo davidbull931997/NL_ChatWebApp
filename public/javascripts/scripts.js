@@ -3,7 +3,7 @@ var socket = io();
 var audio = {
     in: new Audio('/sounds/capisci.mp3'),
     out: new Audio('/sounds/out.mp3'),
-    msg: new Audio('/sounds/thegertz.wav')
+    msg: new Audio('/sounds/235911_thegertz_notification-sound.mp3')
 };
 socket.on('disconnect', function () {
     swal({

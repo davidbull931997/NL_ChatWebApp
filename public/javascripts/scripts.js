@@ -73,7 +73,7 @@ socket.on('server-send-logout-info', function (data) {
 
 socket.on('server-send-msg', function (data) {
     $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span>: ' + data.msg + '</p>');
-    if ($('#chat-page').css('display') != 'none') {
+    if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
         audio.msg.play();
     }
 });

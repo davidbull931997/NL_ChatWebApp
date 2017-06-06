@@ -1,6 +1,6 @@
 //socket.io script
 var socket = io();
-const audio = {
+var audio = {
     in: new Audio('/sounds/capisci.mp3'),
     out: new Audio('/sounds/out.mp3'),
     msg: new Audio('/sounds/thegertz.wav')

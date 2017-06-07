@@ -47,8 +47,6 @@ socket.on('server-send-reg-result', function (data) {
 });
 
 socket.on('server-updated-cculist', function (data) {
-    console.log(data.user);
-    console.log(data.ccu);
     $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item').remove();
     $.each(data.ccu, function (index, item) {
         $('div#ccu > div.panel.panel-default > ul.list-group').append('<li class="list-group-item" style="word-wrap:break-word;" data-username="' + he.encode(item) + '">' + he.encode(item) + '</li>');

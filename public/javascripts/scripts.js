@@ -194,7 +194,7 @@ function checkMessage() {
 function checkRegistration() {
     $('#reg-username').val($.trim($('#reg-username').val()));
     var registerRegexUnicode = {
-        check1: XRegExp('^[\\p{L}\\p{Z}]+$').test($('#reg-username').val()),
+        check1: XRegExp('^[\\p{L}\\p{Z}\\p{N}]+$').test($('#reg-username').val()),
         check2: 0
     };
     XRegExp.forEach($('#reg-username').val(), /\s/, (match, i) => {
@@ -203,6 +203,7 @@ function checkRegistration() {
     //console.log('check1: ' + registerRegexUnicode.check1 + '\tcheck2: ' + registerRegexUnicode.check2);
     if ($('#reg-username').val() == '') {
         $('#reg-username').attr('data-original-title', 'Please input username!');
+        $('#reg-username').tooltip({'selector':'body','padding':0});
         $('#reg-username').tooltip('show');
         setTimeout(function () {
             $('#reg-username').tooltip('hide');

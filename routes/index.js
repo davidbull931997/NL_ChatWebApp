@@ -10,4 +10,5 @@ router.get('/', function (req, res, next) {
 router.get('/canvas', function (req, res, next) {
   res.render('canvas');
 });
+
 module.exports = router;

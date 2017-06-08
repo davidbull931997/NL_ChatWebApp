@@ -49,7 +49,7 @@ socket.on('server-send-reg-result', function (data) {
 socket.on('server-updated-cculist', function (data) {
     $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item').remove();
     $.each(data.ccu, function (index, item) {
-        $('div#ccu > div.panel.panel-default > ul.list-group').append('<li class="list-group-item" style="word-wrap:break-word;" data-username="' + he.encode(item) + '">' + he.encode(item) + '</li>');
+        $('div#ccu > div.panel.panel-default > ul.list-group').append('<li class="list-group-item text-center" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
         if (item == data.user) {
             $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"').addClass('animated bounceInLeft');
         };
@@ -77,7 +77,7 @@ socket.on('server-send-logout-info', function (data) {
 });
 
 socket.on('server-send-msg', function (data) {
-    $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + he.encode(data.user) + '</span>: ' + he.encode(data.msg) + '</p>');
+    $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span>: ' + data.msg + '</p>');
     if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
         audio.msg.play();
     }
@@ -129,52 +129,13 @@ $(function () {
     });
 
     //==================reg page
-    $('#reg-btn').click(function () {
-        if ($('#reg-username').val() == '') {
-            $('#reg-username').attr('data-original-title', 'Please input username!');
-            $('#reg-username').tooltip('show');
-            setTimeout(function () {
-                $('#reg-username').tooltip('hide');
-            }, 2000);
-        }
-        else if ($('#reg-username').val().length > 20) {
-            $('#reg-username').attr('data-original-title', 'Username must less than 20 character');
-            $('#reg-username').tooltip('show');
-            setTimeout(function () {
-                $('#reg-username').tooltip('hide');
-            }, 2000);
-        }
-        else {
-            let encodedInput = he.encode($('#reg-username').val());
-            socket.emit('client-send-reg-info', encodedInput);
-            $('#currentUserName').text(encodedInput);
-            $('#msg-input').focus();
-            $('#chatlog > div > div#mCSB_1_container').html('');
-        }
-        return false;
+    $('#reg-btn').click(function (e) {
+        checkRegistration();
     });
 
     $("#reg-username").on('keydown', function (e) {
         if (e.keyCode == 13) {
-            if ($('#reg-username').val() == '') {
-                $('#reg-username').tooltip('show');
-                setTimeout(function () {
-                    $('#reg-username').tooltip('hide');
-                }, 2000);
-            }
-            else if ($('#reg-username').val().length > 20) {
-                $('#reg-username').attr('data-original-title', 'Username must less than 20 character');
-                $('#reg-username').tooltip('show');
-                setTimeout(function () {
-                    $('#reg-username').tooltip('hide');
-                }, 2000);
-            }
-            else {
-                let encodedInput = he.encode($('#reg-username').val());
-                socket.emit('client-send-reg-info', encodedInput);
-                $('#currentUserName').text(encodedInput);
-                $('#msg-input').focus();
-            }
+            checkRegistration();
             return false;
         }
     });
@@ -196,43 +157,82 @@ $(function () {
             $('#reg-page').fadeIn();
         }, 401);
         socket.emit('client-send-logout', $('#currentUserName').text());
-        return false;
     });
 
     //trigger when user click send msg button
     $('#msg-btn').click(function () {
-        if ($('#msg-input').val() == '') {
-            $('[data-toggle="tooltip"]').tooltip('show');
-            setTimeout(function () {
-                $('[data-toggle="tooltip"]').tooltip('hide');
-            }, 2000);
-        } else {
-            let encodedInput = he.encode($('#msg-input').val());
-            socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedInput });
-            $('#msg-input').val('');
-        }
-        return false;
+        checkMessage();
     });
 
     //trigger when user press enter key
     $("#msg-input").on('keydown', function (e) {
         if (e.keyCode == 13) {
-            if ($('#msg-input').val() == '') {
-                $('[data-toggle="tooltip"]').tooltip('show');
-                setTimeout(function () {
-                    $('[data-toggle="tooltip"]').tooltip('hide');
-                }, 2000);
-            } else {
-                let encodedInput = he.encode($('#msg-input').val());
-                socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedInput });
-                $('#msg-input').val('');
-            }
+            checkMessage();
             return false;
         }
-
     });
 
     //copy right
     let date = new Date();
     $('#copy-right').append(date.getFullYear());
 });
+
+function checkMessage() {
+    $('#msg-input').val($.trim($('#msg-input').val()));
+    if ($('#msg-input').val() == '') {
+        $('[data-toggle="tooltip"]').tooltip('show');
+        setTimeout(function () {
+            $('[data-toggle="tooltip"]').tooltip('hide');
+        }, 2000);
+    } else {
+        var encodedMessage = he.encode($('#msg-input').val(), {useNamedReferences:true});
+        socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedMessage});
+        $('#msg-input').val('');
+    }
+}
+
+function checkRegistration() {
+    $('#reg-username').val($.trim($('#reg-username').val()));
+    var registerRegexUnicode = {
+        check1: XRegExp('^[\\p{L}\\p{Z}]+$').test($('#reg-username').val()),
+        check2: 0
+    };
+    XRegExp.forEach($('#reg-username').val(), /\s/, (match, i) => {
+        registerRegexUnicode.check2++;
+    });
+    //console.log('check1: ' + registerRegexUnicode.check1 + '\tcheck2: ' + registerRegexUnicode.check2);
+    if ($('#reg-username').val() == '') {
+        $('#reg-username').attr('data-original-title', 'Please input username!');
+        $('#reg-username').tooltip('show');
+        setTimeout(function () {
+            $('#reg-username').tooltip('hide');
+        }, 2000);
+    }
+    else if ($('#reg-username').val().length > 20) {
+        $('#reg-username').attr('data-original-title', 'Username must less than 20 character');
+        $('#reg-username').tooltip('show');
+        setTimeout(function () {
+            $('#reg-username').tooltip('hide');
+        }, 2000);
+    }
+    else if (!registerRegexUnicode.check1) {
+        $('#reg-username').attr('data-original-title', 'Please input valid username');
+        $('#reg-username').tooltip('show');
+        setTimeout(function () {
+            $('#reg-username').tooltip('hide');
+        }, 2000);
+    }
+    else if (registerRegexUnicode.check2 > 3) {
+        $('#reg-username').attr('data-original-title', 'Too many whitespace, maximum is 4!');
+        $('#reg-username').tooltip('show');
+        setTimeout(function () {
+            $('#reg-username').tooltip('hide');
+        }, 2000);
+    }
+    else {
+        socket.emit('client-send-reg-info', $('#reg-username').val());
+        $('#currentUserName').text($('#reg-username').val());
+        $('#msg-input').focus();
+        $('#chatlog > div > div#mCSB_1_container').html('');
+    }
+}

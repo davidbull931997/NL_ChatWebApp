@@ -6,19 +6,55 @@ body {
   /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
   font-family: 'Roboto Condensed', sans-serif;
 }
+
 #mCSB_1_container > p{
 	font-family: 'Patrick Hand SC', cursive;
 }
+
+#mCSB_2_container{margin-right: 11px;}
+
 #msg-btn{
 	/*background-image: url('/images/imageedit_2_2648728147.png');*/
-	background-image: url('/images/imageedit_1_3645245254.png');
+	/*background-image: url('/images/imageedit_1_3645245254.png');*/
+	background-image: url('/images/paper-airplane-vector-paper_plane_light_blue.png');
 	background-repeat:no-repeat;
-	background-size:contain;
+	background-size: 100% 100%;
 	background-position:center;
 }
+
+@-webkit-keyframes customslideInRight {
+    0% {
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+        visibility: visible
+    }
+    to {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0)
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+        visibility: visible
+    }
+    to {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0)
+    }
+}
+
+.slideInRight {
+    -webkit-animation-name: slideInRight;
+    animation-name: slideInRight
+}
+
 a {
   color: #00B7FF;
 }
+
 .form-signin {
 			max-width: 330px;
 			padding: 15px;

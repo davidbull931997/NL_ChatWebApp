@@ -1,13 +1,11 @@
 //socket.io script
 var socket = io();
 var audio = {
-    in: document.createElement('audio'),//new Audio('/sounds/capisci.mp3'),
-    out: document.createElement('audio'),//new Audio('/sounds/out.mp3'),
-    msg: document.createElement('audio')//new Audio('/sounds/235911_thegertz_notification-sound.mp3')
+    in: new Audio('/sounds/capisci.mp3'),
+    out: new Audio('/sounds/out.mp3'),
+    msg: new Audio('/sounds/235911_thegertz_notification-sound.mp3')
 };
-audio.in.src = '/sounds/capisci.mp3';
-audio.out.src = '/sounds/out.mp3';
-audio.msg.src = '/sounds/235911_thegertz_notification-sound.mp3';
+
 socket.on('disconnect', function () {
     swal({
         title: 'Disconnected',
@@ -20,9 +18,8 @@ socket.on('disconnect', function () {
 });
 
 socket.on('reconnecting', attempt => {
-    if (attempt > 3) {
+    if (attempt > 3)
         socket.close();
-    }
 });
 
 socket.on('reconnect', attempt => {
@@ -30,50 +27,58 @@ socket.on('reconnect', attempt => {
 });
 
 socket.on('server-send-reg-result', function (data) {
-    if (!data) {
+    if (!data)
         swal('Something wrong', 'The username has been used!', 'error');
-    } else {
-        $('#reg-page').fadeOut();
-        setTimeout(function () {
-            $('#chat-page').fadeIn();
+    else {
+        $('#reg-page').fadeOut(() => {
+            $('#chat-page').fadeIn({
+                progress: (animation, progress, remainingMs) => {
+                    if ((progress >= 0.15 && progress <= 0.25) && $('body').css('background-color') != 'rgb(217, 220, 224)')
+                        $('body').css('background-color', 'rgb(217, 220, 224)');
+                }
+            });
             //fix chat page
-            $('#ccu').height(($(window).height() - $('div#logout').height()));
+            (() => {
+                let a = ($('#ccu > div > div').height() + 20) / 2 - $('#ccu-icon').height() / 2 + 1;
+                $('#ccu-icon').css('padding', a + 'px 15px ' + a + 'px 15px');
+            })()
+            $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
-            if (checkClientSystemInfo().mobile == true) {
+            if (checkClientSystemInfo().mobile) {
                 $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
-                $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 2);
+                $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 5 / 100);
                 $('#msg-input').css('font-size', $(window).width() * 2 / 100 + $(window).height() * 2 / 100 + 'px');
             } else {
                 $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
-                $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 2);
+                $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 3 / 100);
                 $('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
             }
             $('#msg-btn').css({
                 width: $('#msg-btn').height() + 15.5 + 'px',
-                top: '2px'
+                top: '1px',
+                right: '2px'
             });
             //$('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
             $('div#tools.pull-right').css('margin', () => $('div#nav-bar.row').height() / 2 - $('div#tools.pull-right > a.tools').height() / 2 + 'px 10px 0 0px');
             $('div#tools.pull-right > a').each((index, element) => {
-                if (index != $('div#tools.pull-right > a.tools').length - 1) {
+                if (index != $('div#tools.pull-right > a.tools').length - 1)
                     $(element).css('margin-right', '10px');
-                }
             });
-        }, 401);
+        });
     }
 });
 
 socket.on('server-updated-cculist', function (data) {
-    $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item').remove();
+    //$('#mCSB_2_container > div > ul > li.list-group-item').remove();
     $.each(data.ccu, function (index, item) {
-        $('div#ccu > div.panel.panel-default > ul.list-group').append('<li class="list-group-item text-center" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
+        $('div#mCSB_2_container').append('<li class="list-group-item text-center" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
         if (item == data.user) {
-            $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"]').addClass('animated bounceInLeft');
-            // $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"]').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
-            //     $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"]').removeClass('animated bounceInLeft');
-            // });
+            $('div#mCSB_2_container > li.list-group-item[data-username="' + item + '"]').addClass('animated bounceInLeft');
+            $('div#mCSB_2_container > ul.list-group > li.list-group-item[data-username="' + item + '"]').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
+                $('div#mCSB_2_container > li.list-group-item[data-username="' + item + '"]').removeClass('animated bounceInLeft');
+            });
         };
     });
     if ($('#chat-page').css('display') != 'none') {
@@ -84,7 +89,7 @@ socket.on('server-updated-cculist', function (data) {
 });
 
 socket.on('server-send-logout-info', function (data) {
-    $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item').each(function (index, element) {
+    $('div#mCSB_2_container > li.list-group-item').each(function (index, element) {
         if ($(element).text() == data) {
             $(element).addClass('animated bounceOutLeft');
             $(element).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
@@ -112,31 +117,35 @@ $(function () {
     };
     $(window).resize(function () {
         $('#reg-page').css('margin-top', ($(window).height() / 2) - ($('#reg-page').height() / 2));
-        if (checkClientSystemInfo().mobile == true) {
-            if ($(window).height() < mobileOldSize.height && $(window).width()==mobileOldSize.width) 
-            {
+        (() => {
+            let a = ($('#ccu > div > div').height() + 20) / 2 - $('#ccu-icon').height();
+            $('#ccu-icon').css('padding', a + 'px 10px ' + a + 'px 10px');
+        })()
+        if (checkClientSystemInfo().mobile) {
+            if ($(window).height() < mobileOldSize.height && $(window).width() == mobileOldSize.width) {
                 //this case trigger when user keyboard showing up and we will ingnore/not do anything
             }
             else {
                 // $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">window resize</p>');
-                $('#ccu').height(($(window).height() - $('div#logout').height()));
+                $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
                 $('#chatbox').height(($(window).height() - $('div#logout').height()));
                 $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
-                $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 2);
+                $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 5 / 100);
                 $('#msg-input').css('font-size', $(window).width() * 2 / 100 + $(window).height() * 2 / 100 + 'px');
             }
         } else {
-            $('#ccu').height(($(window).height() - $('div#logout').height()));
+            $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
             $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
-            $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 2);
+            $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
             $('#msg-input').height($('#chatbox').height() * 3 / 100);
             $('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
         }
         $('#msg-btn').css({
             width: $('#msg-btn').height() + 15.5 + 'px',
-            top: '2px'
+            top: '1px',
+            right: '2px'
         });
         mobileOldSize.width = $(window).width();
         mobileOldSize.height = $(window).height()
@@ -145,14 +154,19 @@ $(function () {
     //set #reg-page to middle of browser
     $('#reg-page').css('margin-top', ($(window).height() / 2) - ($('#reg-page').height() / 2));
     //fix for a.tools
-    $('div#tools.pull-right > a.tools').css({
+    $('div#tools.pull-right > a').css({
         'color': 'black',
         'text-decoration': 'none'
     });
-
+    //mCustomScrollbar
     $('#chatlog').mCustomScrollbar({
         axis: 'y',
         theme: "dark-3",
+        scrollButtons: { enable: false },
+        keyboard: { enable: false },
+        contentTouchScroll: 10,
+        documentTouchScroll: true,
+        autoHideScrollbar: true,
         callbacks: {
             onOverflowY: () => $('#chatlog').mCustomScrollbar("scrollTo", 'bottom'),
             onUpdate: () => {
@@ -164,6 +178,17 @@ $(function () {
             }
         }
     });
+
+    $('div#ccu > div.panel.panel-default > ul.list-group').mCustomScrollbar({
+        axis: 'y',
+        theme: "dark-3",
+        scrollButtons: { enable: false },
+        keyboard: { enable: false },
+        contentTouchScroll: 10,
+        documentTouchScroll: true,
+        autoHideScrollbar: true
+    });
+
 
     //tooltip
     $('#reg-username').tooltip({ trigger: 'manual' });
@@ -189,20 +214,45 @@ $(function () {
 
     //==================chatting page
     //clear # href
-    $('a.tools').click((e) => e.preventDefault());
-    //trigger when user click canvas icon
-    $('a#canvas-icon.tools').click(() => {
-        if ($('div#private-chat-page').css('display') != 'none') {
+    $('div.tools>a').click((e) => e.preventDefault());
+    $('#ccu-icon').click((e) => e.preventDefault());
+    // //trigger when user click canvas icon
+    // $('a#canvas-icon.tools').click(() => {
+    //     if ($('div#private-chat-page').css('display') != 'none') {
 
+    //     }
+    // });
+
+    //trigger when user click hide/show CCUs button
+    $('#ccu-icon').click(() => {
+        if ($('#ccu').hasClass('col-xs-4') && $('#ccu').hasClass('col-sm-2')) {//HIDE
+            $('#ccu').addClass('animated fadeOutLeft');
+            $('#chatbox').removeClass().addClass('animated slideInRight col-xs-12');
+            $('#ccu').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
+                $('#ccu').removeClass('fadeOutLeft').addClass('hidden');
+            });
+        } else {//SHOW
+            $('#ccu').addClass('animated fadeInLeft');
+            $('#ccu').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
+                $('#ccu').removeClass('fadeInLeft').addClass('col-xs-4 col-sm-2');
+                $('#chatbox').removeClass().addClass('col-xs-8 col-sm-10');
+                //$('#ccu').removeClass('fadeInLeft');
+            });
         }
     });
 
     //trigger when user click logout button
     $('#logout-btn').click(function () {
-        $('#chat-page').fadeOut();
-        setTimeout(function () {
-            $('#reg-page').fadeIn();
-        }, 401);
+        $('#chat-page').fadeOut({
+            done: (animation, jumpedToEnd) => {
+                $('#reg-page').fadeIn({
+                    start: (animation) => {
+                        if ($('body').css('background-color') != 'rgb(255, 255, 255)')
+                            $('body').css('background-color', 'rgb(255, 255, 255)');
+                    }
+                });
+            }
+        });
         socket.emit('client-send-logout', $('#currentUserName').text());
     });
 

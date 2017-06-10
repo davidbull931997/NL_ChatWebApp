@@ -1,10 +1,13 @@
 //socket.io script
 var socket = io();
 var audio = {
-    in: new Audio('/sounds/capisci.mp3'),
-    out: new Audio('/sounds/out.mp3'),
-    msg: new Audio('/sounds/235911_thegertz_notification-sound.mp3')
+    in: document.createElement('audio'),//new Audio('/sounds/capisci.mp3'),
+    out: document.createElement('audio'),//new Audio('/sounds/out.mp3'),
+    msg: document.createElement('audio')//new Audio('/sounds/235911_thegertz_notification-sound.mp3')
 };
+audio.in.src = '/sounds/capisci.mp3';
+audio.out.src = '/sounds/out.mp3';
+audio.msg.src = '/sounds/235911_thegertz_notification-sound.mp3';
 socket.on('disconnect', function () {
     swal({
         title: 'Disconnected',
@@ -22,6 +25,10 @@ socket.on('reconnecting', attempt => {
     }
 });
 
+socket.on('reconnect', attempt => {
+    socket.close();
+});
+
 socket.on('server-send-reg-result', function (data) {
     if (!data) {
         swal('Something wrong', 'The username has been used!', 'error');
@@ -32,10 +39,22 @@ socket.on('server-send-reg-result', function (data) {
             //fix chat page
             $('#ccu').height(($(window).height() - $('div#logout').height()));
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
-            $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
-            $('#msg-btn').height($('#chatbox').height() * 3 / 100);
-            $('#msg-input').height($('#chatbox').height() * 3 / 100);
-            $('#msg-input').css('font-size', $('#msg-input').height() - 7 + 'px');
+            if (checkClientSystemInfo().mobile == true) {
+                $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
+                $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 2);
+                $('#msg-input').height($('#chatbox').height() * 5 / 100);
+                $('#msg-input').css('font-size', $(window).width() * 2 / 100 + $(window).height() * 2 / 100 + 'px');
+            } else {
+                $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
+                $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 2);
+                $('#msg-input').height($('#chatbox').height() * 3 / 100);
+                $('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
+            }
+            $('#msg-btn').css({
+                width: $('#msg-btn').height() + 15.5 + 'px',
+                top: '2px'
+            });
+            //$('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
             $('div#tools.pull-right').css('margin', () => $('div#nav-bar.row').height() / 2 - $('div#tools.pull-right > a.tools').height() / 2 + 'px 10px 0 0px');
             $('div#tools.pull-right > a').each((index, element) => {
                 if (index != $('div#tools.pull-right > a.tools').length - 1) {
@@ -51,7 +70,10 @@ socket.on('server-updated-cculist', function (data) {
     $.each(data.ccu, function (index, item) {
         $('div#ccu > div.panel.panel-default > ul.list-group').append('<li class="list-group-item text-center" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
         if (item == data.user) {
-            $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"').addClass('animated bounceInLeft');
+            $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"]').addClass('animated bounceInLeft');
+            // $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"]').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
+            //     $('div#ccu > div.panel.panel-default > ul.list-group > li.list-group-item[data-username="' + item + '"]').removeClass('animated bounceInLeft');
+            // });
         };
     });
     if ($('#chat-page').css('display') != 'none') {
@@ -82,17 +104,42 @@ socket.on('server-send-msg', function (data) {
         audio.msg.play();
     }
 });
-
 $(function () {
     //on user resize browser
+    var mobileOldSize = {
+        width: $(window).width(),
+        height: $(window).height()
+    };
     $(window).resize(function () {
         $('#reg-page').css('margin-top', ($(window).height() / 2) - ($('#reg-page').height() / 2));
-        $('#ccu').height(($(window).height() - $('div#logout').height()));
-        $('#chatbox').height(($(window).height() - $('div#logout').height()));
-        $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
-        $('#msg-btn').height($('#chatbox').height() * 3 / 100);
-        $('#msg-input').height($('#chatbox').height() * 3 / 100);
-        $('#msg-input').css('font-size', $('#msg-input').height() - 7 + 'px');
+        if (checkClientSystemInfo().mobile == true) {
+            if ($(window).height() < mobileOldSize.height && $(window).width()==mobileOldSize.width) 
+            {
+                //this case trigger when user keyboard showing up and we will ingnore/not do anything
+            }
+            else {
+                // $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">window resize</p>');
+                $('#ccu').height(($(window).height() - $('div#logout').height()));
+                $('#chatbox').height(($(window).height() - $('div#logout').height()));
+                $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
+                $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 2);
+                $('#msg-input').height($('#chatbox').height() * 5 / 100);
+                $('#msg-input').css('font-size', $(window).width() * 2 / 100 + $(window).height() * 2 / 100 + 'px');
+            }
+        } else {
+            $('#ccu').height(($(window).height() - $('div#logout').height()));
+            $('#chatbox').height(($(window).height() - $('div#logout').height()));
+            $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
+            $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 2);
+            $('#msg-input').height($('#chatbox').height() * 3 / 100);
+            $('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
+        }
+        $('#msg-btn').css({
+            width: $('#msg-btn').height() + 15.5 + 'px',
+            top: '2px'
+        });
+        mobileOldSize.width = $(window).width();
+        mobileOldSize.height = $(window).height()
     });
 
     //set #reg-page to middle of browser
@@ -162,6 +209,7 @@ $(function () {
     //trigger when user click send msg button
     $('#msg-btn').click(function () {
         checkMessage();
+        return false;
     });
 
     //trigger when user press enter key
@@ -185,8 +233,8 @@ function checkMessage() {
             $('[data-toggle="tooltip"]').tooltip('hide');
         }, 2000);
     } else {
-        var encodedMessage = he.encode($('#msg-input').val(), {useNamedReferences:true});
-        socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedMessage});
+        var encodedMessage = he.encode($('#msg-input').val(), { useNamedReferences: true });
+        socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedMessage });
         $('#msg-input').val('');
     }
 }
@@ -203,7 +251,6 @@ function checkRegistration() {
     //console.log('check1: ' + registerRegexUnicode.check1 + '\tcheck2: ' + registerRegexUnicode.check2);
     if ($('#reg-username').val() == '') {
         $('#reg-username').attr('data-original-title', 'Please input username!');
-        $('#reg-username').tooltip({'selector':'body','padding':0});
         $('#reg-username').tooltip('show');
         setTimeout(function () {
             $('#reg-username').tooltip('hide');
@@ -237,3 +284,4 @@ function checkRegistration() {
         $('#chatlog > div > div#mCSB_1_container').html('');
     }
 }
+function checkClientSystemInfo() { !function (s) { var e = "-", i = ""; screen.width && (width = screen.width ? screen.width : "", height = screen.height ? screen.height : "", i += "" + width + " x " + height); var r, n, o, d = navigator.appVersion, a = navigator.userAgent, t = navigator.appName, c = "" + parseFloat(navigator.appVersion), w = parseInt(navigator.appVersion, 10); -1 != (n = a.indexOf("Opera")) && (t = "Opera", c = a.substring(n + 6), -1 != (n = a.indexOf("Version")) && (c = a.substring(n + 8))), -1 != (n = a.indexOf("OPR")) ? (t = "Opera", c = a.substring(n + 4)) : -1 != (n = a.indexOf("Edge")) ? (t = "Microsoft Edge", c = a.substring(n + 5)) : -1 != (n = a.indexOf("MSIE")) ? (t = "Microsoft Internet Explorer", c = a.substring(n + 5)) : -1 != (n = a.indexOf("Chrome")) ? (t = "Chrome", c = a.substring(n + 7)) : -1 != (n = a.indexOf("Safari")) ? (t = "Safari", c = a.substring(n + 7), -1 != (n = a.indexOf("Version")) && (c = a.substring(n + 8))) : -1 != (n = a.indexOf("Firefox")) ? (t = "Firefox", c = a.substring(n + 8)) : -1 != a.indexOf("Trident/") ? (t = "Microsoft Internet Explorer", c = a.substring(a.indexOf("rv:") + 3)) : (r = a.lastIndexOf(" ") + 1) < (n = a.lastIndexOf("/")) && (t = a.substring(r, n), c = a.substring(n + 1), t.toLowerCase() == t.toUpperCase() && (t = navigator.appName)), -1 != (o = c.indexOf(";")) && (c = c.substring(0, o)), -1 != (o = c.indexOf(" ")) && (c = c.substring(0, o)), -1 != (o = c.indexOf(")")) && (c = c.substring(0, o)), w = parseInt("" + c, 10), isNaN(w) && (c = "" + parseFloat(navigator.appVersion), w = parseInt(navigator.appVersion, 10)); var W = /Mobile|mini|Fennec|Android|iP(ad|od|hone)/.test(d), f = navigator.cookieEnabled ? !0 : !1; "undefined" != typeof navigator.cookieEnabled || f || (document.cookie = "testcookie", f = -1 != document.cookie.indexOf("testcookie") ? !0 : !1); var b = e, O = [{ s: "Windows 10", r: /(Windows 10.0|Windows NT 10.0)/ }, { s: "Windows 8.1", r: /(Windows 8.1|Windows NT 6.3)/ }, { s: "Windows 8", r: /(Windows 8|Windows NT 6.2)/ }, { s: "Windows 7", r: /(Windows 7|Windows NT 6.1)/ }, { s: "Windows Vista", r: /Windows NT 6.0/ }, { s: "Windows Server 2003", r: /Windows NT 5.2/ }, { s: "Windows XP", r: /(Windows NT 5.1|Windows XP)/ }, { s: "Windows 2000", r: /(Windows NT 5.0|Windows 2000)/ }, { s: "Windows ME", r: /(Win 9x 4.90|Windows ME)/ }, { s: "Windows 98", r: /(Windows 98|Win98)/ }, { s: "Windows 95", r: /(Windows 95|Win95|Windows_95)/ }, { s: "Windows NT 4.0", r: /(Windows NT 4.0|WinNT4.0|WinNT|Windows NT)/ }, { s: "Windows CE", r: /Windows CE/ }, { s: "Windows 3.11", r: /Win16/ }, { s: "Android", r: /Android/ }, { s: "Open BSD", r: /OpenBSD/ }, { s: "Sun OS", r: /SunOS/ }, { s: "Linux", r: /(Linux|X11)/ }, { s: "iOS", r: /(iPhone|iPad|iPod)/ }, { s: "Mac OS X", r: /Mac OS X/ }, { s: "Mac OS", r: /(MacPPC|MacIntel|Mac_PowerPC|Macintosh)/ }, { s: "QNX", r: /QNX/ }, { s: "UNIX", r: /UNIX/ }, { s: "BeOS", r: /BeOS/ }, { s: "OS/2", r: /OS\/2/ }, { s: "Search Bot", r: /(nuhk|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask Jeeves\/Teoma|ia_archiver)/ }]; for (var g in O) { var p = O[g]; if (p.r.test(a)) { b = p.s; break } } var u = e; switch (/Windows/.test(b) && (u = /Windows (.*)/.exec(b)[1], b = "Windows"), b) { case "Mac OS X": u = /Mac OS X (10[\.\_\d]+)/.exec(a)[1]; break; case "Android": u = /Android ([\.\_\d]+)/.exec(a)[1]; break; case "iOS": u = /OS (\d+)_(\d+)_?(\d+)?/.exec(d), u = u[1] + "." + u[2] + "." + (0 | u[3]) }var h = "no check"; if ("undefined" != typeof swfobject) { var x = swfobject.getFlashPlayerVersion(); h = x.major > 0 ? x.major + "." + x.minor + " r" + x.release : e } s.jscd = { screen: i, browser: t, browserVersion: c, browserMajorVersion: w, mobile: W, os: b, osVersion: u, cookies: f, flashVersion: h } }(this); var s = { os: jscd.os, osVersion: jscd.osVersion, browser: jscd.browser, browserVersion: jscd.browserVersion, browserMajorVersion: jscd.browserMajorVersion, mobile: jscd.mobile, flash: jscd.flash, cookie: jscd.cookies, screenSize: jscd.screen, userAgent: navigator.userAgent }; return s }

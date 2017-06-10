@@ -1,8 +1,21 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed|Patrick+Hand+SC&subset=vietnamese');
+/*@import url('https://fonts.googleapis.com/css?family=Patrick+Hand+SC&subset=vietnamese');*/
+
 body {
   padding: 0 0px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+  font-family: 'Roboto Condensed', sans-serif;
 }
-
+#mCSB_1_container > p{
+	font-family: 'Patrick Hand SC', cursive;
+}
+#msg-btn{
+	/*background-image: url('/images/imageedit_2_2648728147.png');*/
+	background-image: url('/images/imageedit_1_3645245254.png');
+	background-repeat:no-repeat;
+	background-size:contain;
+	background-position:center;
+}
 a {
   color: #00B7FF;
 }

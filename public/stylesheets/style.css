@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed|Patrick+Hand+SC&subset=vietnamese');
-/*@import url('https://fonts.googleapis.com/css?family=Patrick+Hand+SC&subset=vietnamese');*/
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed|Patrick+Hand+SC');
 
 body {
   padding: 0 0px;
@@ -22,33 +21,13 @@ body {
 	background-position:center;
 }
 
-@-webkit-keyframes customslideInRight {
-    0% {
-        -webkit-transform: translate3d(100%, 0, 0);
-        transform: translate3d(100%, 0, 0);
-        visibility: visible
-    }
-    to {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0)
-    }
+#chatbox{
+	-webkit-transition: width .5s ease-in-out;
+	transition: width .5s ease-in-out;
 }
-
-@keyframes slideInRight {
-    0% {
-        -webkit-transform: translate3d(100%, 0, 0);
-        transform: translate3d(100%, 0, 0);
-        visibility: visible
-    }
-    to {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0)
-    }
-}
-
-.slideInRight {
-    -webkit-animation-name: slideInRight;
-    animation-name: slideInRight
+#ccu{
+	-webkit-transition: width .5s ease-in-out;
+	transition: width .5s ease-in-out;
 }
 
 a {

@@ -3,7 +3,15 @@ var socket = io();
 var audio = {
     in: new Audio('/sounds/capisci.mp3'),
     out: new Audio('/sounds/out.mp3'),
-    msg: new Audio('/sounds/235911_thegertz_notification-sound.mp3')
+    msg: new Audio('/sounds/235911_thegertz_notification-sound.mp3'),
+    typing: new Audio('/sounds/159723__kentvideoproduction__ipad-button-sound-effect.mp3')
+};
+
+var ccuHide = {
+    status: false,
+    oldWindowWidth: $(window).width(),
+    originalCCUWidth: 0,
+    originalChatBoxWidth: 0
 };
 
 socket.on('disconnect', function () {
@@ -38,29 +46,31 @@ socket.on('server-send-reg-result', function (data) {
                 }
             });
             //fix chat page
-            (() => {
+            if ($('#ccu-icon').css('padding') == '0px') {
                 let a = ($('#ccu > div > div').height() + 20) / 2 - $('#ccu-icon').height() / 2 + 1;
-                $('#ccu-icon').css('padding', a + 'px 15px ' + a + 'px 15px');
-            })()
+                $('#ccu-icon').css({
+                    'padding': '10px 10px 10px 10px',
+                    'top': parseFloat($('#ccu > div > div').css('padding-top'))
+                });
+            }
+            $('#msg-input').css('padding-left', (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2);
+            $('#chatlog > div > div#mCSB_1_container').css('left', $('#ccu-icon').width() + 20);
             $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
             if (checkClientSystemInfo().mobile) {
                 $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 5 / 100);
-                $('#msg-input').css('font-size', $(window).width() * 2 / 100 + $(window).height() * 2 / 100 + 'px');
             } else {
                 $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 3 / 100);
-                $('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
             }
             $('#msg-btn').css({
                 width: $('#msg-btn').height() + 15.5 + 'px',
                 top: '1px',
                 right: '2px'
             });
-            //$('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
             $('div#tools.pull-right').css('margin', () => $('div#nav-bar.row').height() / 2 - $('div#tools.pull-right > a.tools').height() / 2 + 'px 10px 0 0px');
             $('div#tools.pull-right > a').each((index, element) => {
                 if (index != $('div#tools.pull-right > a.tools').length - 1)
@@ -104,7 +114,7 @@ socket.on('server-send-logout-info', function (data) {
 });
 
 socket.on('server-send-msg', function (data) {
-    $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span>: ' + data.msg + '</p>');
+    $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span><span>: ' + data.msg + '</span></p>');
     if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
         audio.msg.play();
     }
@@ -117,10 +127,11 @@ $(function () {
     };
     $(window).resize(function () {
         $('#reg-page').css('margin-top', ($(window).height() / 2) - ($('#reg-page').height() / 2));
-        (() => {
-            let a = ($('#ccu > div > div').height() + 20) / 2 - $('#ccu-icon').height();
-            $('#ccu-icon').css('padding', a + 'px 10px ' + a + 'px 10px');
-        })()
+        if ($('#chat-page').css('display') == 'block' && $(window).width != ccuHide.oldWindowWidth) {
+            ccuHide.status = false;
+        }
+        $('#chatlog > div > div#mCSB_1_container').css('left', $('#ccu-icon').width() + 30);
+        $('#msg-input').css('padding-left', (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2);
         if (checkClientSystemInfo().mobile) {
             if ($(window).height() < mobileOldSize.height && $(window).width() == mobileOldSize.width) {
                 //this case trigger when user keyboard showing up and we will ingnore/not do anything
@@ -132,7 +143,6 @@ $(function () {
                 $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 5 / 100);
-                $('#msg-input').css('font-size', $(window).width() * 2 / 100 + $(window).height() * 2 / 100 + 'px');
             }
         } else {
             $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
@@ -140,7 +150,6 @@ $(function () {
             $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
             $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
             $('#msg-input').height($('#chatbox').height() * 3 / 100);
-            $('#msg-input').css('font-size', $(window).width() * 1 / 100 + $(window).height() * 1 / 100 + 'px');
         }
         $('#msg-btn').css({
             width: $('#msg-btn').height() + 15.5 + 'px',
@@ -225,19 +234,45 @@ $(function () {
 
     //trigger when user click hide/show CCUs button
     $('#ccu-icon').click(() => {
-        if ($('#ccu').hasClass('col-xs-4') && $('#ccu').hasClass('col-sm-2')) {//HIDE
-            $('#ccu').addClass('animated fadeOutLeft');
-            $('#chatbox').removeClass().addClass('animated slideInRight col-xs-12');
-            $('#ccu').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
-                $('#ccu').removeClass('fadeOutLeft').addClass('hidden');
-            });
+        if (!ccuHide.status) {//no need to check devices size cause we checked it in JQuery .resize handle event
+            if ($('#ccu').width()) {
+                ccuHide.originalCCUWidth = $('#ccu').width();
+                ccuHide.originalChatBoxWidth = $('#chatbox').width();
+            } else {
+                if ($(window).width() < 768) {//extra small devices
+                    ccuHide.originalCCUWidth = $(window).width() / 3;
+                    ccuHide.originalChatBoxWidth = $(window).width() / 3 * 2;
+                } else {
+                    ccuHide.originalCCUWidth = $(window).width() / 6;
+                    ccuHide.originalChatBoxWidth = $(window).width() / 6 * 5;
+                }
+            }
+            ccuHide.status = true;
+        }
+        if ($('#ccu').width()) {//HIDE
+
+            $('#chatbox').css({ float: 'right', clear: 'right' }).width((ccuHide.originalCCUWidth + ccuHide.originalChatBoxWidth));
+            $('#ccu').width(0);
+            setTimeout(function () {//fix panel heading of ccu list
+                $('div.panel-heading').css('display', 'none');
+            }, 500 / 2);
+            setTimeout(function () {//replace col-* class
+                $('#chatbox').addClass('col-xs-12');
+                $('#chatbox').removeClass('col-xs-8 col-sm-10').css('width', '');
+            }, 501);
         } else {//SHOW
-            $('#ccu').addClass('animated fadeInLeft');
-            $('#ccu').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
-                $('#ccu').removeClass('fadeInLeft').addClass('col-xs-4 col-sm-2');
-                $('#chatbox').removeClass().addClass('col-xs-8 col-sm-10');
-                //$('#ccu').removeClass('fadeInLeft');
-            });
+            $('#ccu').width(ccuHide.originalCCUWidth);
+            $('#chatbox').width(ccuHide.originalChatBoxWidth);
+            setTimeout(function () {//fix panel heading of ccu list
+                $('div.panel-heading').css('display', '');
+                setTimeout(function () {
+                    $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
+                }, 100);
+            }, 500 / 2);
+            setTimeout(function () {//replace col-* class
+                $('#chatbox').addClass('col-xs-8 col-sm-10').removeClass('col-xs-12').css({ float: 'right', clear: 'right', width: '' });
+                $('#ccu').css('width', '');
+            }, 501);
         }
     });
 
@@ -286,6 +321,7 @@ function checkMessage() {
         var encodedMessage = he.encode($('#msg-input').val(), { useNamedReferences: true });
         socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedMessage });
         $('#msg-input').val('');
+        audio.typing.play();
     }
 }
 

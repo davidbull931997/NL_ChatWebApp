@@ -5,7 +5,7 @@
 	<title>
 		<%= title %>
 	</title>
-	<meta name="charset" content="utf-8">
+	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
 
 	<!-- Socket.IO -->
@@ -46,8 +46,10 @@
 	<!--RegEx-->
 	<script src="https://unpkg.com/xregexp/xregexp-all.js"></script>
 
-	<!-- Private CSS & JS -->
+	<!--HTML Encode-->
 	<script src="/javascripts/he.js"></script>
+
+	<!-- Private CSS & JS -->
 	<link rel="stylesheet" href="/stylesheets/style.css">
 	<script src="/javascripts/scripts.js"></script>
 </head>
@@ -118,7 +120,7 @@
 			</div>
 		</div>
 		<div class="col-xs-8 col-sm-10" id="chatbox" style="padding:0;">
-			<a href="#" id="ccu-icon" class="fa fa-users fa-lg" style="color:black;text-decoration:none;position:absolute;z-index:1;background-color:lightblue;top:0;"></a>
+			<a href="#" id="ccu-icon" class="fa fa-users fa-lg" style="color:black;text-decoration:none;position:absolute;z-index:1;background-color:lightblue;"></a>
 			<div class="row" id="chatlog" style="background-color:#f7ffe0;margin:0;">
 			</div>
 			<div class="row" id="inputform" style="margin:0;">

@@ -83,12 +83,13 @@ socket.on('server-send-reg-result', function (data) {
 socket.on('server-updated-cculist', function (data) {
     //$('#mCSB_2_container > div > ul > li.list-group-item').remove();
     $.each(data.ccu, function (index, item) {
-        $('div#mCSB_2_container').append('<li class="list-group-item text-center" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
         if (item == data.user) {
+            $('div#mCSB_2_container').append('<li class="list-group-item text-center" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
             $('div#mCSB_2_container > li.list-group-item[data-username="' + item + '"]').addClass('animated bounceInLeft');
-            $('div#mCSB_2_container > ul.list-group > li.list-group-item[data-username="' + item + '"]').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
+            $('div#mCSB_2_container > li.list-group-item[data-username="' + item + '"]').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
                 $('div#mCSB_2_container > li.list-group-item[data-username="' + item + '"]').removeClass('animated bounceInLeft');
             });
+            return false;
         };
     });
     if ($('#chat-page').css('display') != 'none') {

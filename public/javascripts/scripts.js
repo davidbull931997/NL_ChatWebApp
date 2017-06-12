@@ -144,7 +144,18 @@ socket.on('server-send-msg', function (data) {
     if ($(window).width() < 768) {
         fontSize = '1.5em';
     }
-    $('#chatlog > div > div#mCSB_1_container').append('<p style="font-size:' + fontSize + ';word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span><span>: ' + data.msg + '</span></p>');
+    //check if found url
+    var msgRegExp = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)*([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?/ig;
+    if (data.msg.match(msgRegExp)) {
+        data.msg = data.msg.replace(msgRegExp, (matched) => {
+            return '<a href="' + matched + '" target="_blank">' + matched + '</a>';
+        });
+    }
+    $('#chatlog > div > div#mCSB_1_container').append(`
+        <p style="font-size:` + fontSize + `;word-wrap:break-word;">
+            <span style="color:#ffc4c4;">` + data.user + `</span>
+            <span>: ` + data.msg + `</span>
+        </p>`);
     if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
         audio.msg.play();
     }

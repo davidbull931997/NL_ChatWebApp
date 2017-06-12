@@ -260,17 +260,16 @@ $(function () {
                 ccuHide.originalChatBoxWidth = $('#chatbox').width();
             } else {
                 if ($(window).width() < 768) {//extra small devices
-                    ccuHide.originalCCUWidth = $(window).width() / 3;
-                    ccuHide.originalChatBoxWidth = $(window).width() / 3 * 2;
+                    ccuHide.originalCCUWidth = $(window).width() / 12 * 4;
+                    ccuHide.originalChatBoxWidth = $(window).width() / 12 * 8;
                 } else {
-                    ccuHide.originalCCUWidth = $(window).width() / 6;
-                    ccuHide.originalChatBoxWidth = $(window).width() / 6 * 5;
+                    ccuHide.originalCCUWidth = $(window).width() / 12 * 2;
+                    ccuHide.originalChatBoxWidth = $(window).width() / 12 * 10;
                 }
             }
             ccuHide.status = true;
         }
         if ($('#ccu').width()) {//HIDE
-
             $('#chatbox').css({ float: 'right', clear: 'right' }).width((ccuHide.originalCCUWidth + ccuHide.originalChatBoxWidth));
             $('#ccu').width(0);
             setTimeout(function () {//fix panel heading of ccu list

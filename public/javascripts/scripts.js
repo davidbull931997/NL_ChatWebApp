@@ -139,7 +139,6 @@ socket.on('server-send-logout-info', function (data) {
 });
 
 socket.on('server-send-msg', function (data) {
-    //let fontSize = $('#ccu > div > div > p').css('font-size');
     var fontSize = '2em';
     if ($(window).width() < 768) {
         fontSize = '1.5em';
@@ -179,7 +178,6 @@ $(function () {
     };
     $(window).resize(function () {
         $('#reg-page').css('margin-top', ($(window).height() / 2) - ($('#reg-page').height() / 2));
-        //let fontSize = $('#ccu > div > div > p').css('font-size');
         var fontSize = '2em';
         if ($(window).width() < 768) {
             fontSize = '1.5em';
@@ -399,7 +397,6 @@ function checkRegistration() {
     XRegExp.forEach($('#reg-username').val(), /\s/, (match, i) => {
         registerRegexUnicode.check2++;
     });
-    //console.log('check1: ' + registerRegexUnicode.check1 + '\tcheck2: ' + registerRegexUnicode.check2);
     if ($('#reg-username').val() == '') {
         $('#reg-username').attr('data-original-title', 'Please input username!');
         $('#reg-username').tooltip('show');

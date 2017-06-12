@@ -1,11 +1,6 @@
 //socket.io script
 var socket = io();
-var audio = {
-    in: new Audio('/sounds/capisci.mp3'),
-    out: new Audio('/sounds/out.mp3'),
-    msg: new Audio('/sounds/235911_thegertz_notification-sound.mp3'),
-    typing: new Audio('/sounds/159723__kentvideoproduction__ipad-button-sound-effect.mp3')
-};
+var audio = new Object();
 
 var ccuHide = {
     status: false,
@@ -144,6 +139,11 @@ socket.on('server-send-msg', function (data) {
     }
 });
 $(function () {
+    //load sounds effect
+    audio.in = new Audio('/sounds/capisci.mp3');
+    audio.out = new Audio('/sounds/out.mp3');
+    audio.msg = new Audio('/sounds/235911_thegertz_notification-sound.mp3');
+    audio.typing = new Audio('/sounds/159723__kentvideoproduction__ipad-button-sound-effect.mp3');
     //on user resize browser
     var mobileOldSize = {
         width: $(window).width(),

@@ -49,7 +49,7 @@ socket.on('server-send-reg-result', function (data) {
                 });
             }
             $('#msg-input').css('padding-left', (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2);
-            $('#chatlog > div > div#mCSB_1_container').css('left', $('#ccu-icon').width() + 20);
+            $('#chatlog > div > div#mCSB_1_container').css('left', ($('#ccu-icon').width() + 20) + 10 + 'px');
             $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
             if (checkClientSystemInfo().mobile) {
@@ -129,17 +129,24 @@ socket.on('server-send-logout-info', function (data) {
 });
 
 socket.on('server-send-msg', function (data) {
-    $('#chatlog > div > div#mCSB_1_container').append('<p style="margin:0 0 0 10px;font-size:25px;word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span><span>: ' + data.msg + '</span></p>');
+    let fontSize = $('#ccu > div > div > p').css('font-size');
+    $('#chatlog > div > div#mCSB_1_container').append('<p style="font-size:' + fontSize + ';word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span><span>: ' + data.msg + '</span></p>');
     if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
         audio.msg.play();
     }
 });
 $(function () {
     //load sounds effect
-    audio.in = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKSWpmVUh6dWZtdlk');
-    audio.out = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKcWJHZGRxN3FVbFE');
-    audio.msg = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKZzNNX2xmZ19KNVE');
-    audio.typing = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKYXlnQUlfSnFtdk0');
+    //-GOOGLE DRIVE BLOCK 24H
+    // audio.in = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKSWpmVUh6dWZtdlk');
+    // audio.out = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKcWJHZGRxN3FVbFE');
+    // audio.msg = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKZzNNX2xmZ19KNVE');
+    // audio.typing = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKYXlnQUlfSnFtdk0');
+    //-DROPBOX
+    audio.in = new Audio('https://www.dropbox.com/s/dx8psffosukivut/capisci.mp3?dl=1');
+    audio.out = new Audio('https://www.dropbox.com/s/3kekrb3khejwjhn/out.mp3?dl=1');
+    audio.msg = new Audio('https://www.dropbox.com/s/tk1w2hs95yqg8oh/235911_thegertz_notification-sound.mp3?dl=1');
+    audio.typing = new Audio('https://www.dropbox.com/s/9vqq4m2qjy0zwx8/159723__kentvideoproduction__ipad-button-sound-effect.mp3?dl=1');
     //on user resize browser
     var mobileOldSize = {
         width: $(window).width(),
@@ -147,10 +154,12 @@ $(function () {
     };
     $(window).resize(function () {
         $('#reg-page').css('margin-top', ($(window).height() / 2) - ($('#reg-page').height() / 2));
+        let fontSize = $('#ccu > div > div > p').css('font-size');
+        $('#chatlog > div > div#mCSB_1_container > p').css('font-size', fontSize);
         if ($('#chat-page').css('display') == 'block' && $(window).width != ccuHide.oldWindowWidth) {
             ccuHide.status = false;
         }
-        $('#chatlog > div > div#mCSB_1_container').css('left', $('#ccu-icon').width() + 30);
+        $('#chatlog > div > div#mCSB_1_container').css('left', ($('#ccu-icon').width() + 20) + 10 + 'px');
         $('#msg-input').css('padding-left', (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2);
         if (checkClientSystemInfo().mobile) {
             if ($(window).height() < mobileOldSize.height && $(window).width() == mobileOldSize.width) {

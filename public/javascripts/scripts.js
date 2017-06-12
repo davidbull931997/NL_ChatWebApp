@@ -48,8 +48,18 @@ socket.on('server-send-reg-result', function (data) {
                     'top': parseFloat($('#ccu > div > div').css('padding-top'))
                 });
             }
-            $('#msg-input').css('padding-left', (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2);
-            $('#chatlog > div > div#mCSB_1_container').css('left', ($('#ccu-icon').width() + 20) + 10 + 'px');
+            $('#msg-input').css({
+                'padding-left': (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2
+            });
+            setTimeout(function () {
+                $('#msg-input').css({
+                    'padding-right': $('#msg-btn').width() + parseFloat($('#msg-input').css('padding-left'))
+                });
+            }, 50);
+            $('#chatlog > div > div#mCSB_1_container').css({
+                'padding-left': ($('#ccu-icon').width() + 20) + 10 + 'px',
+                'padding-right': '20px'
+            });
             $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
             if (checkClientSystemInfo().mobile) {
@@ -64,7 +74,7 @@ socket.on('server-send-reg-result', function (data) {
             $('#msg-btn').css({
                 width: $('#msg-btn').height() + 15.5 + 'px',
                 top: '1px',
-                right: '2px'
+                right: '1px'
             });
             $('div#tools.pull-right').css('margin', () => $('div#nav-bar.row').height() / 2 - $('div#tools.pull-right > a.tools').height() / 2 + 'px 10px 0 0px');
             $('div#tools.pull-right > a').each((index, element) => {
@@ -167,8 +177,16 @@ $(function () {
         if ($('#chat-page').css('display') == 'block' && $(window).width != ccuHide.oldWindowWidth) {
             ccuHide.status = false;
         }
-        $('#chatlog > div > div#mCSB_1_container').css('left', ($('#ccu-icon').width() + 20) + 10 + 'px');
-        $('#msg-input').css('padding-left', (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2);
+        $('#chatlog > div > div#mCSB_1_container').css({
+            'padding-left': ($('#ccu-icon').width() + 20) + 10 + 'px',
+            'padding-right': ($('#chatlog > div > div#mCSB_1_container').width() * 5 / 100) + 'px'
+        });
+        $('#msg-input').css({
+            'padding-left': (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2
+        });
+        $('#msg-input').css({
+            'padding-right': $('#msg-btn').width() + parseFloat($('#msg-input').css('padding-left'))
+        });
         if (checkClientSystemInfo().mobile) {
             if ($(window).height() < mobileOldSize.height && $(window).width() == mobileOldSize.width) {
                 //this case trigger when user keyboard showing up and we will ingnore/not do anything
@@ -191,7 +209,7 @@ $(function () {
         $('#msg-btn').css({
             width: $('#msg-btn').height() + 15.5 + 'px',
             top: '1px',
-            right: '2px'
+            right: '1px'
         });
         mobileOldSize.width = $(window).width();
         mobileOldSize.height = $(window).height()

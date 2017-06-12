@@ -71,8 +71,9 @@ socket.on('server-send-reg-result', function (data) {
                 $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 3 / 100);
             }
+            //126,8498942917548
             $('#msg-btn').css({
-                width: $('#msg-btn').height() + 15.5 + 'px',
+                width: $('#msg-btn').height() * 126.8498942917548 / 100,
                 top: '1px',
                 right: '1px'
             });
@@ -216,7 +217,7 @@ $(function () {
             $('#msg-input').height($('#chatbox').height() * 3 / 100);
         }
         $('#msg-btn').css({
-            width: $('#msg-btn').height() + 15.5 + 'px',
+            width: $('#msg-btn').height() * 126.8498942917548 / 100,
             top: '1px',
             right: '1px'
         });

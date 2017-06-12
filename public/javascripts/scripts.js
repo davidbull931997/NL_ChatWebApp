@@ -40,6 +40,10 @@ socket.on('server-send-reg-result', function (data) {
     else {
         $('#reg-page').fadeOut(() => {
             $('#chat-page').fadeIn({
+                // start:(animation)=>{
+                //     if($('div#mCSB_2_container > li.list-group-item[data-username="' + $('#currentUserName').text() + '"]').length>1)
+                //         $('div#mCSB_2_container > li.list-group-item[data-username="' + $('#currentUserName').text() + '"]')[0].remove();
+                // },
                 progress: (animation, progress, remainingMs) => {
                     if ((progress >= 0.15 && progress <= 0.25) && $('body').css('background-color') != 'rgb(217, 220, 224)')
                         $('body').css('background-color', 'rgb(217, 220, 224)');
@@ -81,17 +85,27 @@ socket.on('server-send-reg-result', function (data) {
 });
 
 socket.on('server-updated-cculist', function (data) {
-    //$('#mCSB_2_container > div > ul > li.list-group-item').remove();
+    $('#mCSB_2_container > li.list-group-item').remove();//remove all li tag
     $.each(data.ccu, function (index, item) {
+        var exist = false;
+        //Continue next loop if any user in list existed
+        $('#mCSB_2_container > li.list-group-item').each((index, element) => {
+            if ($(element).text() == item) {
+                exist = true;
+                return false;
+            }
+        });
+        if (exist) return true;
+        //add users to CCU panel
+        $('div#mCSB_2_container').append('<li class="list-group-item text-center" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
         if (item == data.user) {
-            $('div#mCSB_2_container').append('<li class="list-group-item text-center" style="word-wrap:break-word;" data-username="' + item + '">' + item + '</li>');
             $('div#mCSB_2_container > li.list-group-item[data-username="' + item + '"]').addClass('animated bounceInLeft');
             $('div#mCSB_2_container > li.list-group-item[data-username="' + item + '"]').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
                 $('div#mCSB_2_container > li.list-group-item[data-username="' + item + '"]').removeClass('animated bounceInLeft');
             });
-            return false;
         };
     });
+    //play sound XD
     if ($('#chat-page').css('display') != 'none') {
         setTimeout(function () {
             audio.in.play();
@@ -103,9 +117,18 @@ socket.on('server-send-logout-info', function (data) {
     $('div#mCSB_2_container > li.list-group-item').each(function (index, element) {
         if ($(element).text() == data) {
             $(element).addClass('animated bounceOutLeft');
-            $(element).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
-                $(element).remove();
-            });
+            if ($(element).text() == $('#currentUserName').text()) {
+                setTimeout(function () {
+                    $('div#mCSB_2_container > li.list-group-item[data-username="' + data + '"]').removeClass('animated bounceInLeft');
+                    $(element).remove();
+                }, 1001);
+            }
+            else {
+                $(element).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', () => {
+                    $('div#mCSB_2_container > li.list-group-item[data-username="' + data + '"]').removeClass('animated bounceInLeft');
+                    $(element).remove();
+                });
+            }
             if ($('#chat-page').css('display') != 'none') {
                 audio.out.play();
             }
@@ -224,7 +247,7 @@ $(function () {
 
     //==================chatting page
     //clear # href
-    $('div.tools>a').click((e) => e.preventDefault());
+    $('div#tools > a').click((e) => e.preventDefault());
     $('#ccu-icon').click((e) => e.preventDefault());
     // //trigger when user click canvas icon
     // $('a#canvas-icon.tools').click(() => {

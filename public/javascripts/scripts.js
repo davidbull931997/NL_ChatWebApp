@@ -129,7 +129,11 @@ socket.on('server-send-logout-info', function (data) {
 });
 
 socket.on('server-send-msg', function (data) {
-    let fontSize = $('#ccu > div > div > p').css('font-size');
+    //let fontSize = $('#ccu > div > div > p').css('font-size');
+    var fontSize = '2em';
+    if ($(window).width() < 768) {
+        fontSize = '1.5em';
+    }
     $('#chatlog > div > div#mCSB_1_container').append('<p style="font-size:' + fontSize + ';word-wrap:break-word;"><span style="color:#ffc4c4;">' + data.user + '</span><span>: ' + data.msg + '</span></p>');
     if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
         audio.msg.play();
@@ -154,7 +158,11 @@ $(function () {
     };
     $(window).resize(function () {
         $('#reg-page').css('margin-top', ($(window).height() / 2) - ($('#reg-page').height() / 2));
-        let fontSize = $('#ccu > div > div > p').css('font-size');
+        //let fontSize = $('#ccu > div > div > p').css('font-size');
+        var fontSize = '2em';
+        if ($(window).width() < 768) {
+            fontSize = '1.5em';
+        }
         $('#chatlog > div > div#mCSB_1_container > p').css('font-size', fontSize);
         if ($('#chat-page').css('display') == 'block' && $(window).width != ccuHide.oldWindowWidth) {
             ccuHide.status = false;

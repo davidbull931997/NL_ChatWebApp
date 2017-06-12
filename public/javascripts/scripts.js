@@ -35,10 +35,6 @@ socket.on('server-send-reg-result', function (data) {
     else {
         $('#reg-page').fadeOut(() => {
             $('#chat-page').fadeIn({
-                // start:(animation)=>{
-                //     if($('div#mCSB_2_container > li.list-group-item[data-username="' + $('#currentUserName').text() + '"]').length>1)
-                //         $('div#mCSB_2_container > li.list-group-item[data-username="' + $('#currentUserName').text() + '"]')[0].remove();
-                // },
                 progress: (animation, progress, remainingMs) => {
                     if ((progress >= 0.15 && progress <= 0.25) && $('body').css('background-color') != 'rgb(217, 220, 224)')
                         $('body').css('background-color', 'rgb(217, 220, 224)');
@@ -140,10 +136,10 @@ socket.on('server-send-msg', function (data) {
 });
 $(function () {
     //load sounds effect
-    audio.in = new Audio('/sounds/capisci.mp3');
-    audio.out = new Audio('/sounds/out.mp3');
-    audio.msg = new Audio('/sounds/235911_thegertz_notification-sound.mp3');
-    audio.typing = new Audio('/sounds/159723__kentvideoproduction__ipad-button-sound-effect.mp3');
+    audio.in = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKSWpmVUh6dWZtdlk');
+    audio.out = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKcWJHZGRxN3FVbFE');
+    audio.msg = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKZzNNX2xmZ19KNVE');
+    audio.typing = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKYXlnQUlfSnFtdk0');
     //on user resize browser
     var mobileOldSize = {
         width: $(window).width(),

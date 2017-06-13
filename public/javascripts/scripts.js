@@ -66,10 +66,18 @@ socket.on('server-send-reg-result', function (data) {
                 $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 5 / 100);
+                // setTimeout(function () {
+                //     $('#inputform > div > div').height($('#chatbox').height() * 5 / 100);//#inputform > div > div
+                //     $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 5 / 100);//#inputform > div > div > div.emojionearea-editor
+                // }, 100);
             } else {
                 $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 3 / 100);
+                // setTimeout(function () {
+                //     $('#inputform > div > div').height($('#chatbox').height() * 3 / 100);//#inputform > div > div
+                //     $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 3 / 100);//#inputform > div > div > div.emojionearea-editor
+                // }, 100);
             }
             //126,8498942917548
             $('#msg-btn').css({
@@ -161,6 +169,11 @@ socket.on('server-send-msg', function (data) {
     }
 });
 $(function () {
+    $("#msg-input").emojioneArea({
+        pickerPosition: "top",
+        filtersPosition: "bottom",
+        tonesStyle: "radio"
+    });
     //load sounds effect
     //-GOOGLE DRIVE BLOCK 24H
     // audio.in = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKSWpmVUh6dWZtdlk');
@@ -208,6 +221,8 @@ $(function () {
                 $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 5 / 100);
+                $('#inputform > div > div').height($('#chatbox').height() * 5 / 100);//#inputform > div > div #inputform > div > div > div.emojionearea-editor
+                $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 5 / 100);//#inputform > div > div > div.emojionearea-editor
             }
         } else {
             $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
@@ -215,6 +230,8 @@ $(function () {
             $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
             $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
             $('#msg-input').height($('#chatbox').height() * 3 / 100);
+            $('#inputform > div > div').height($('#chatbox').height() * 3 / 100);//#inputform > div > div
+            $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 3 / 100);//#inputform > div > div > div.emojionearea-editor
         }
         $('#msg-btn').css({
             width: $('#msg-btn').height() * 126.8498942917548 / 100,

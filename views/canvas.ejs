@@ -10,17 +10,31 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://necolas.github.io/normalize.css/7.0.0/normalize.css">
+
+    <link rel="stylesheet" type="text/css" href="/emojiOnTextArea/emojionearea/dist/emojionearea.min.css">
+    <script type="text/javascript" src="/emojiOnTextArea/emojionearea/dist/emojionearea.min.js"></script>
 </head>
 
 <body>
     <!--<canvas id="draw"></canvas>
     <button type="button">CLEAR</button>
     <script src="/javascripts/canvas.js"></script>-->
+    <input type="text" name="" value="" style="">
     <script>
+        $(() => {
+            $("input").emojioneArea({
+                pickerPosition: "top",
+                filtersPosition: "bottom",
+                tonesStyle: "radio"
+            });
+            setTimeout(function () {
+                $('body > div').css('margin-top', 400);
+            }, 100);
+        });
         /**
- * JavaScript Client Detection
- * (C) viazenetti GmbH (Christian Ludwig)
- */
+         * JavaScript Client Detection
+         * (C) viazenetti GmbH (Christian Ludwig)
+         */
         (function (window) {
             {
                 var unknown = '-';
@@ -205,15 +219,15 @@
         }(this));
 
         $('body').append(
-            '<p>'+
-                'OS: ' + jscd.os + ' ' + jscd.osVersion + '</br>' +
-                'Browser: ' + jscd.browser + ' ' + jscd.browserMajorVersion +
-                ' (' + jscd.browserVersion + ')</br>' +
-                'Mobile: ' + jscd.mobile + '</br>' +
-                'Flash: ' + jscd.flashVersion + '</br>' +
-                'Cookies: ' + jscd.cookies + '</br>' +
-                'Screen Size: ' + jscd.screen + '</br></br>' +
-                'Full User Agent: ' + navigator.userAgent+
+            '<p>' +
+            'OS: ' + jscd.os + ' ' + jscd.osVersion + '</br>' +
+            'Browser: ' + jscd.browser + ' ' + jscd.browserMajorVersion +
+            ' (' + jscd.browserVersion + ')</br>' +
+            'Mobile: ' + jscd.mobile + '</br>' +
+            'Flash: ' + jscd.flashVersion + '</br>' +
+            'Cookies: ' + jscd.cookies + '</br>' +
+            'Screen Size: ' + jscd.screen + '</br></br>' +
+            'Full User Agent: ' + navigator.userAgent +
             '</p>'
         );
     </script>

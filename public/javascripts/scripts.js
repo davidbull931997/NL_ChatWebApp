@@ -1,6 +1,6 @@
 //socket.io script
 var socket = io();
-var audio = new Object();
+// var audio = new Object();
 
 var ccuHide = {
     status: false,
@@ -118,7 +118,7 @@ socket.on('server-updated-cculist', function (data) {
     //play sound XD
     if ($('#chat-page').css('display') != 'none') {
         setTimeout(function () {
-            audio.in.play();
+            // audio.in.play();
         }, 500);
     }
 });
@@ -140,7 +140,7 @@ socket.on('server-send-logout-info', function (data) {
                 });
             }
             if ($('#chat-page').css('display') != 'none') {
-                audio.out.play();
+                // audio.out.play();
             }
             return false;
         }
@@ -165,15 +165,15 @@ socket.on('server-send-msg', function (data) {
             <span>: ` + data.msg + `</span>
         </p>`);
     if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
-        audio.msg.play();
+        // audio.msg.play();
     }
 });
 $(function () {
-    $("#msg-input").emojioneArea({
-        pickerPosition: "top",
-        filtersPosition: "bottom",
-        tonesStyle: "radio"
-    });
+    // $("#msg-input").emojioneArea({
+    //     pickerPosition: "top",
+    //     filtersPosition: "bottom",
+    //     tonesStyle: "radio"
+    // });
     //load sounds effect
     //-GOOGLE DRIVE BLOCK 24H
     // audio.in = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKSWpmVUh6dWZtdlk');
@@ -181,10 +181,10 @@ $(function () {
     // audio.msg = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKZzNNX2xmZ19KNVE');
     // audio.typing = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKYXlnQUlfSnFtdk0');
     //-DROPBOX
-    audio.in = new Audio('https://www.dropbox.com/s/dx8psffosukivut/capisci.mp3?dl=1');
-    audio.out = new Audio('https://www.dropbox.com/s/3kekrb3khejwjhn/out.mp3?dl=1');
-    audio.msg = new Audio('https://www.dropbox.com/s/tk1w2hs95yqg8oh/235911_thegertz_notification-sound.mp3?dl=1');
-    audio.typing = new Audio('https://www.dropbox.com/s/9vqq4m2qjy0zwx8/159723__kentvideoproduction__ipad-button-sound-effect.mp3?dl=1');
+    // audio.in = new Audio('https://www.dropbox.com/s/dx8psffosukivut/capisci.mp3?dl=1');
+    // audio.out = new Audio('https://www.dropbox.com/s/3kekrb3khejwjhn/out.mp3?dl=1');
+    // audio.msg = new Audio('https://www.dropbox.com/s/tk1w2hs95yqg8oh/235911_thegertz_notification-sound.mp3?dl=1');
+    // audio.typing = new Audio('https://www.dropbox.com/s/9vqq4m2qjy0zwx8/159723__kentvideoproduction__ipad-button-sound-effect.mp3?dl=1');
     //on user resize browser
     var mobileOldSize = {
         width: $(window).width(),
@@ -334,26 +334,21 @@ $(function () {
         if ($('#ccu').width()) {//HIDE
             $('#chatbox').css({ float: 'right', clear: 'right' }).width((ccuHide.originalCCUWidth + ccuHide.originalChatBoxWidth));
             $('#ccu').width(0);
+            $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 25);
             setTimeout(function () {//fix panel heading of ccu list
-                $('div.panel-heading').css('display', 'none');
+                $('div.panel-heading').attr('style', 'padding: 0 0 !important;');
             }, 500 / 2);
-            setTimeout(function () {//replace col-* class
-                $('#chatbox').addClass('col-xs-12');
-                $('#chatbox').removeClass('col-xs-8 col-sm-10').css('width', '');
-            }, 501);
+            $('#chatbox').addClass('col-xs-12');
+            $('#chatbox').removeClass('col-xs-8 col-sm-10').css('width', '');
         } else {//SHOW
             $('#ccu').width(ccuHide.originalCCUWidth);
             $('#chatbox').width(ccuHide.originalChatBoxWidth);
             setTimeout(function () {//fix panel heading of ccu list
-                $('div.panel-heading').css('display', '');
-                setTimeout(function () {
-                    $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
-                }, 100);
-            }, 500 / 2);
-            setTimeout(function () {//replace col-* class
-                $('#chatbox').addClass('col-xs-8 col-sm-10').removeClass('col-xs-12').css({ float: 'right', clear: 'right', width: '' });
-                $('#ccu').css('width', '');
-            }, 501);
+                $('div.panel-heading').css('padding', '10px 15px');
+                $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
+            }, 500 / 4 * 3);
+            $('#chatbox').addClass('col-xs-8 col-sm-10').removeClass('col-xs-12').css({ float: 'right', clear: 'right', width: '' });
+            $('#ccu').css('width', '');
         }
     });
 
@@ -402,7 +397,7 @@ function checkMessage() {
         var encodedMessage = he.encode($('#msg-input').val(), { useNamedReferences: true });
         socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedMessage });
         $('#msg-input').val('');
-        audio.typing.play();
+        // audio.typing.play();
     }
 }
 

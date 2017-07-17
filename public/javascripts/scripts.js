@@ -1,6 +1,6 @@
 //socket.io script
 var socket = io();
-// var audio = new Object();
+var audio = new Object();
 
 var ccuHide = {
     status: false,
@@ -119,7 +119,7 @@ socket.on('server-updated-cculist', function (data) {
     //play sound XD
     if ($('#chat-page').css('display') != 'none') {
         setTimeout(function () {
-            // audio.in.play();
+            audio.in.play();
         }, 500);
     }
 });
@@ -141,7 +141,7 @@ socket.on('server-send-logout-info', function (data) {
                 });
             }
             if ($('#chat-page').css('display') != 'none') {
-                // audio.out.play();
+                audio.out.play();
             }
             return false;
         }
@@ -165,8 +165,8 @@ socket.on('server-send-msg', function (data) {
             <span style="color:#ffc4c4;">` + data.user + `</span>
             <span>: ` + data.msg + `</span>
         </p>`);
-    if ($('#chat-page').css('display') != 'none' && $('#currentUserName').text() != data.user) {
-        // audio.msg.play();
+    if ($('#chat-page').css('display') != 'none') {
+        audio.msg.play();
     }
 });
 $(function () {
@@ -175,17 +175,12 @@ $(function () {
     //     filtersPosition: "bottom",
     //     tonesStyle: "radio"
     // });
+
     //load sounds effect
-    //-GOOGLE DRIVE BLOCK 24H
-    // audio.in = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKSWpmVUh6dWZtdlk');
-    // audio.out = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKcWJHZGRxN3FVbFE');
-    // audio.msg = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKZzNNX2xmZ19KNVE');
-    // audio.typing = new Audio('https://drive.google.com/uc?export=download&id=0B6OTfTktDXsKYXlnQUlfSnFtdk0');
-    //-DROPBOX
-    // audio.in = new Audio('https://www.dropbox.com/s/dx8psffosukivut/capisci.mp3?dl=1');
-    // audio.out = new Audio('https://www.dropbox.com/s/3kekrb3khejwjhn/out.mp3?dl=1');
-    // audio.msg = new Audio('https://www.dropbox.com/s/tk1w2hs95yqg8oh/235911_thegertz_notification-sound.mp3?dl=1');
-    // audio.typing = new Audio('https://www.dropbox.com/s/9vqq4m2qjy0zwx8/159723__kentvideoproduction__ipad-button-sound-effect.mp3?dl=1');
+    audio.in = new Audio('/sounds/coming.mp3');
+    audio.out = new Audio('/sounds/come-out.mp3');
+    audio.msg = new Audio('/sounds/msg.mp3');
+
     //on user resize browser
     var mobileOldSize = {
         width: $(window).width(),
@@ -399,7 +394,6 @@ function checkMessage() {
         var encodedMessage = he.encode($('#msg-input').val(), { useNamedReferences: true });
         socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedMessage });
         $('#msg-input').val('');
-        // audio.typing.play();
     }
 }
 

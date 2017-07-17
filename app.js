@@ -54,8 +54,8 @@ app.use(function (err, req, res, next) {
 var CCUs = [];
 
 //socket.io on client connect event
-// app.io.on('connection', function (socket) {
-//   console.log('a user connected - socketId: ' + socket.id);
+app.io.on('connection', function (socket) {
+  console.log('a user connected - socketId: ' + socket.id);
 
   socket.on('disconnect', () => {
     // console.log('Client disconnected - socketId: ' + socket.id);

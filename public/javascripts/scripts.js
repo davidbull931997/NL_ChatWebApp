@@ -6,7 +6,8 @@ var ccuHide = {
     status: false,
     oldWindowWidth: $(window).width(),
     originalCCUWidth: 0,
-    originalChatBoxWidth: 0
+    originalChatBoxWidth: 0,
+    oldHeight:0
 };
 
 socket.on('disconnect', function () {
@@ -255,8 +256,8 @@ $(function () {
         theme: "dark-3",
         scrollButtons: { enable: false },
         keyboard: { enable: false },
-        contentTouchScroll: 10,
-        documentTouchScroll: true,
+        // contentTouchScroll: 10,
+        // documentTouchScroll: true,
         autoHideScrollbar: true,
         callbacks: {
             onOverflowY: () => $('#chatlog').mCustomScrollbar("scrollTo", 'bottom'),
@@ -275,8 +276,8 @@ $(function () {
         theme: "dark-3",
         scrollButtons: { enable: false },
         keyboard: { enable: false },
-        contentTouchScroll: 10,
-        documentTouchScroll: true,
+        //contentTouchScroll: 10,
+        //documentTouchScroll: true,
         autoHideScrollbar: true
     });
 
@@ -332,21 +333,22 @@ $(function () {
             ccuHide.status = true;
         }
         if ($('#ccu').width()) {//HIDE
+            ccuHide.oldHeight = document.querySelector('div#ccu > div.panel.panel-default > ul.list-group');
             $('#chatbox').css({ float: 'right', clear: 'right' }).width((ccuHide.originalCCUWidth + ccuHide.originalChatBoxWidth));
             $('#ccu').width(0);
-            $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 25);
+            document.querySelector('#ccu > div').style.border = '0px';
             setTimeout(function () {//fix panel heading of ccu list
                 $('div.panel-heading').attr('style', 'padding: 0 0 !important;');
-            }, 500 / 2);
+            }, 400);
             $('#chatbox').addClass('col-xs-12');
             $('#chatbox').removeClass('col-xs-8 col-sm-10').css('width', '');
         } else {//SHOW
             $('#ccu').width(ccuHide.originalCCUWidth);
             $('#chatbox').width(ccuHide.originalChatBoxWidth);
             setTimeout(function () {//fix panel heading of ccu list
-                $('div.panel-heading').css('padding', '10px 15px');
-                $('div#ccu > div.panel.panel-default > ul.list-group').height($(window).height() - $('div#logout').height() - $('div#ccu > div.panel.panel-default > div.panel-heading').height() - 23);
-            }, 500 / 4 * 3);
+                document.querySelector('#ccu > div').style.border = '';
+                $('div.panel-heading').removeAttr('style');
+            }, 100);
             $('#chatbox').addClass('col-xs-8 col-sm-10').removeClass('col-xs-12').css({ float: 'right', clear: 'right', width: '' });
             $('#ccu').css('width', '');
         }

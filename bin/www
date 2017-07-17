@@ -21,7 +21,7 @@ app.set('port', port);
 
 var server = http.createServer(app);
 //attach socket.io server to listening
-app.io.attach(server);
+app.io.attach(server,{ pingTimeout:5000 });
 
 /**
  * Listen on provided port, on all network interfaces.

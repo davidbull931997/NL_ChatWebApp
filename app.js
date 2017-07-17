@@ -58,7 +58,7 @@ app.io.on('connection', function (socket) {
   console.log('a user connected - socketId: ' + socket.id);
 
   socket.on('disconnect', () => {
-    // console.log('Client disconnected - socketId: ' + socket.id);
+    console.log('Client disconnected - socketId: ' + socket.id);
     if (CCUs.indexOf(socket.username) >= 0) {
       CCUs.splice(CCUs.indexOf(socket.username), 1);
       app.io.sockets.emit('server-send-logout-info', socket.username);

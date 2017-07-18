@@ -7,7 +7,7 @@ var ccuHide = {
     oldWindowWidth: $(window).width(),
     originalCCUWidth: 0,
     originalChatBoxWidth: 0,
-    oldHeight:0
+    oldHeight: 0
 };
 
 socket.on('disconnect', function () {
@@ -66,25 +66,24 @@ socket.on('server-send-reg-result', function (data) {
             if (checkClientSystemInfo().mobile) {
                 $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 4);
+                $('#emoji-btn').height($('#chatbox').height() * 5 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 5 / 100);
-                // setTimeout(function () {
-                //     $('#inputform > div > div').height($('#chatbox').height() * 5 / 100);//#inputform > div > div
-                //     $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 5 / 100);//#inputform > div > div > div.emojionearea-editor
-                // }, 100);
             } else {
                 $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
+                $('#emoji-btn').height($('#chatbox').height() * 3 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 3 / 100);
-                // setTimeout(function () {
-                //     $('#inputform > div > div').height($('#chatbox').height() * 3 / 100);//#inputform > div > div
-                //     $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 3 / 100);//#inputform > div > div > div.emojionearea-editor
-                // }, 100);
             }
             //126,8498942917548
             $('#msg-btn').css({
                 width: $('#msg-btn').height() * 126.8498942917548 / 100,
                 top: '1px',
                 right: '1px'
+            });
+            $('#emoji-btn').css('right', $('#msg-btn').css('width'));
+            $('#emoji-btn').css({
+                top: '1px',
+                right: ($('#msg-btn').width() + 1) + 'px'
             });
             $('div#tools.pull-right').css('margin', () => $('div#nav-bar.row').height() / 2 - $('div#tools.pull-right > a.tools').height() / 2 + 'px 10px 0 0px');
             $('div#tools.pull-right > a').each((index, element) => {
@@ -216,6 +215,7 @@ $(function () {
                 $('#chatbox').height(($(window).height() - $('div#logout').height()));
                 $('#chatlog').height(($('#chatbox').height() * 95 / 100) - 6);
                 $('#msg-btn').height($('#chatbox').height() * 5 / 100 + 4);
+                $('#emoji-btn').height($('#chatbox').height() * 5 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 5 / 100);
                 $('#inputform > div > div').height($('#chatbox').height() * 5 / 100);//#inputform > div > div #inputform > div > div > div.emojionearea-editor
                 $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 5 / 100);//#inputform > div > div > div.emojionearea-editor
@@ -225,6 +225,7 @@ $(function () {
             $('#chatbox').height(($(window).height() - $('div#logout').height()));
             $('#chatlog').height(($('#chatbox').height() * 97 / 100) - 6);
             $('#msg-btn').height($('#chatbox').height() * 3 / 100 + 4);
+            $('#emoji-btn').height($('#chatbox').height() * 3 / 100 + 4);
             $('#msg-input').height($('#chatbox').height() * 3 / 100);
             $('#inputform > div > div').height($('#chatbox').height() * 3 / 100);//#inputform > div > div
             $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 3 / 100);//#inputform > div > div > div.emojionearea-editor
@@ -233,6 +234,10 @@ $(function () {
             width: $('#msg-btn').height() * 126.8498942917548 / 100,
             top: '1px',
             right: '1px'
+        });
+        $('#emoji-btn').css({
+            top: '1px',
+            right: ($('#msg-btn').width() + 1) + 'px'
         });
         mobileOldSize.width = $(window).width();
         mobileOldSize.height = $(window).height()
@@ -362,6 +367,11 @@ $(function () {
             }
         });
         socket.emit('client-send-logout', $('#currentUserName').text());
+    });
+
+    //trigger when user click emoji button
+    $('#emoji-btn').click(function () {
+        return false;
     });
 
     //trigger when user click send msg button

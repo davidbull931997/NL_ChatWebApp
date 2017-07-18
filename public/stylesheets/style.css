@@ -1,6 +1,5 @@
 body {
   padding: 0 0px;
-  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
   font-family: 'Roboto Condensed', sans-serif;
 }
 
@@ -11,8 +10,6 @@ body {
 #mCSB_2_container{margin-right: 11px;}
 
 #msg-btn{
-	/*background-image: url('/images/imageedit_2_2648728147.png');*/
-	/*background-image: url('/images/imageedit_1_3645245254.png');*/
 	background-image: url('/images/paper-airplane-vector-paper_plane_light_blue.png');
 	background-repeat:no-repeat;
 	background-size: contain;
@@ -36,39 +33,39 @@ a {
 			max-width: 330px;
 			padding: 15px;
 			margin: 0 auto;
-		}
+}
 
-		.form-signin .checkbox,
-		.form-signin .form-signin-heading {
-			margin-bottom: 10px;
-		}
+.form-signin .checkbox,
+.form-signin .form-signin-heading {
+	margin-bottom: 10px;
+}
 
-		.form-signin .checkbox {
-			font-weight: 400;
-		}
+.form-signin .checkbox {
+	font-weight: 400;
+}
 
-		.form-signin .form-control {
-			position: relative;
-			height: auto;
-			-webkit-box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			box-sizing: border-box;
-			padding: 10px;
-			font-size: 16px
-		}
+.form-signin .form-control {
+	position: relative;
+	height: auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+	font-size: 16px;
+}
 
-		.form-signin .form-control:focus {
-			z-index: 2
-		}
+.form-signin .form-control:focus {
+	z-index: 2;
+}
 
-		.form-signin input[type=email] {
-			margin-bottom: -1px;
-			border-bottom-right-radius: 0;
-			border-bottom-left-radius: 0
-		}
+.form-signin input[type=email] {
+	margin-bottom: -1px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
 
-		.form-signin input[type=password] {
-			margin-bottom: 10px;
-			border-top-left-radius: 0;
-			border-top-right-radius: 0;
-		}
+.form-signin input[type=password] {
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}

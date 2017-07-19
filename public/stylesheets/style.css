@@ -69,3 +69,13 @@ a {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
+
+a#emoji-btn:focus {
+    color: #00B7FF;
+}
+a#emoji-btn:hover {
+    color: #00B7FF;
+}
+#mCSB_1_container > p > span:nth-child(2) > a:hover{
+	color: #00B7FF;
+}

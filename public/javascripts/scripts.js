@@ -54,7 +54,7 @@ socket.on('server-send-reg-result', function (data) {
             });
             setTimeout(function () {
                 $('#msg-input').css({
-                    'padding-right': $('#msg-btn').width() + parseFloat($('#msg-input').css('padding-left'))
+                    'padding-right': $('#emoji-btn').width() + $('#msg-btn').width() + parseFloat($('#msg-input').css('padding-left'))
                 });
             }, 50);
             $('#chatlog > div > div#mCSB_1_container').css({
@@ -74,6 +74,7 @@ socket.on('server-send-reg-result', function (data) {
                 $('#emoji-btn').height($('#chatbox').height() * 3 / 100 + 4);
                 $('#msg-input').height($('#chatbox').height() * 3 / 100);
             }
+            $('#emoji-btn > i').css('margin-top', (($('#emoji-btn').height() - $('#emoji-btn > i').height()) / 2) + 'px');
             //126,8498942917548
             $('#msg-btn').css({
                 width: $('#msg-btn').height() * 126.8498942917548 / 100,
@@ -169,11 +170,6 @@ socket.on('server-send-msg', function (data) {
     }
 });
 $(function () {
-    // $("#msg-input").emojioneArea({
-    //     pickerPosition: "top",
-    //     filtersPosition: "bottom",
-    //     tonesStyle: "radio"
-    // });
 
     //load sounds effect
     audio.in = new Audio('/sounds/coming.mp3');
@@ -203,7 +199,7 @@ $(function () {
             'padding-left': (parseFloat($('#msg-input').css('height')) - parseFloat($('#msg-input').css('line-height'))) / 2
         });
         $('#msg-input').css({
-            'padding-right': $('#msg-btn').width() + parseFloat($('#msg-input').css('padding-left'))
+            'padding-right': $('#emoji-btn').width() + $('#msg-btn').width() + parseFloat($('#msg-input').css('padding-left'))
         });
         if (checkClientSystemInfo().mobile) {
             if ($(window).height() < mobileOldSize.height && $(window).width() == mobileOldSize.width) {
@@ -230,6 +226,7 @@ $(function () {
             $('#inputform > div > div').height($('#chatbox').height() * 3 / 100);//#inputform > div > div
             $('#inputform > div > div > div.emojionearea-editor').height($('#chatbox').height() * 3 / 100);//#inputform > div > div > div.emojionearea-editor
         }
+        $('#emoji-btn > i').css('margin-top', (($('#emoji-btn').height() - $('#emoji-btn > i').height()) / 2) + 'px');
         $('#msg-btn').css({
             width: $('#msg-btn').height() * 126.8498942917548 / 100,
             top: '1px',

@@ -79,3 +79,8 @@ a#emoji-btn:hover {
 #mCSB_1_container > p > span:nth-child(2) > a:hover{
 	color: #00B7FF;
 }
+
+/* custom emoji icon size */
+.emojione{
+	height: 1ex;
+}

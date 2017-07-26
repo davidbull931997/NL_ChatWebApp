@@ -153,17 +153,52 @@ socket.on('server-send-msg', function (data) {
     if ($(window).width() < 768) {
         fontSize = '1.5em';
     }
-    //check if found url
+
+    //EmojiOne
+    //replace unsafe emoji
+    data.msg = data.msg.replace(he.escape('<3'), '<3');
+    data.msg = data.msg.replace(he.escape('</3'), '</3');
+    data.msg = data.msg.replace(he.escape(':\')'), ':\')');
+    data.msg = data.msg.replace(he.escape(':\'-)'), ':\'-)');
+    data.msg = data.msg.replace(he.escape('\':)'), '\':)');
+    data.msg = data.msg.replace(he.escape('\':-)'), '\':-)');
+    data.msg = data.msg.replace(he.escape('\'=)'), '\'=)');
+    data.msg = data.msg.replace(he.escape('\':D'), '\':D');
+    data.msg = data.msg.replace(he.escape('\':-D'), '\':-D');
+    data.msg = data.msg.replace(he.escape('\'=D'), '\'=D');
+    data.msg = data.msg.replace(he.escape('>:)'), '>:)');
+    data.msg = data.msg.replace(he.escape('>;)'), '>;)');
+    data.msg = data.msg.replace(he.escape('>:-)'), '>:-)');
+    data.msg = data.msg.replace(he.escape('>=)'), '>=)');
+    data.msg = data.msg.replace(he.escape('\':('), '\':(');
+    data.msg = data.msg.replace(he.escape('\':-('), '\':-(');
+    data.msg = data.msg.replace(he.escape('\'=('), '\'=(');
+    data.msg = data.msg.replace(he.escape('>:P'), '>:P');
+    data.msg = data.msg.replace(he.escape('>:['), '>:[');
+    data.msg = data.msg.replace(he.escape('>:('), '>:(');
+    data.msg = data.msg.replace(he.escape('>:-('), '>:-(');
+    data.msg = data.msg.replace(he.escape(':\'('), ':\'(');
+    data.msg = data.msg.replace(he.escape(':\'-('), ':\'-(');
+    data.msg = data.msg.replace(he.escape('>.<'), '>.<');
+    data.msg = data.msg.replace(he.escape('>:O'), '>:O');
+    data.msg = emojione.toShort(data.msg);
+    data.msg = emojione.toImage(data.msg);
+    //check if found url and convert to <a> tag
     var msgRegExp = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)*([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?/ig;
     if (data.msg.match(msgRegExp)) {
         data.msg = data.msg.replace(msgRegExp, (matched) => {
+            if ((data.msg[data.msg.search(matched) - 1] == "\"" && data.msg[data.msg.search(matched) + (matched.length)] == "\"") ||
+                (data.msg[data.msg.search(matched) - 1] == "'" && data.msg[data.msg.search(matched) + (matched.length)] == "'"))
+                return matched;
             return '<a href="' + matched + '" target="_blank">' + matched + '</a>';
         });
     }
+
     $('#chatlog > div > div#mCSB_1_container').append(`
         <p style="font-size:` + fontSize + `;word-wrap:break-word;">
             <span style="color:#ffc4c4;">` + data.user + `</span>
-            <span>: ` + data.msg + `</span>
+            <span> : </span>
+            <span class="ascii-emoji">` + data.msg + `</span>
         </p>`);
     if ($('#chat-page').css('display') != 'none') {
         audio.msg.play();
@@ -175,6 +210,7 @@ $(function () {
     audio.in = new Audio('/sounds/coming.mp3');
     audio.out = new Audio('/sounds/come-out.mp3');
     audio.msg = new Audio('/sounds/msg.mp3');
+    emojione.ascii = true;
 
     //on user resize browser
     var mobileOldSize = {
@@ -398,7 +434,7 @@ function checkMessage() {
             $('[data-toggle="tooltip"]').tooltip('hide');
         }, 2000);
     } else {
-        var encodedMessage = he.encode($('#msg-input').val(), { useNamedReferences: true });
+        var encodedMessage = he.escape($('#msg-input').val());
         socket.emit('client-send-chat-msg', { user: $('#currentUserName').text(), msg: encodedMessage });
         $('#msg-input').val('');
     }
@@ -448,4 +484,35 @@ function checkRegistration() {
         $('#chatlog > div > div#mCSB_1_container').html('');
     }
 }
+
+function replaceUnSafeEmoji(string) {
+    var newString = "";
+    newString = string.replace(he.escape('<3'), '<3');
+    newString = string.replace(he.escape('</3'), '</3');
+    newString = string.replace(he.escape(':\')'), ':\')');
+    newString = string.replace(he.escape(':\'-)'), ':\'-)');
+    newString = string.replace(he.escape('\':)'), '\':)');
+    newString = string.replace(he.escape('\':-)'), '\':-)');
+    newString = string.replace(he.escape('\'=)'), '\'=)');
+    newString = string.replace(he.escape('\':D'), '\':D');
+    newString = string.replace(he.escape('\':-D'), '\':-D');
+    newString = string.replace(he.escape('\'=D'), '\'=D');
+    newString = string.replace(he.escape('>:)'), '>:)');
+    newString = string.replace(he.escape('>;)'), '>;)');
+    newString = string.replace(he.escape('>:-)'), '>:-)');
+    newString = string.replace(he.escape('>=)'), '>=)');
+    newString = string.replace(he.escape('\':('), '\':(');
+    newString = string.replace(he.escape('\':-('), '\':-(');
+    newString = string.replace(he.escape('\'=('), '\'=(');
+    newString = string.replace(he.escape('>:P'), '>:P');
+    newString = string.replace(he.escape('>:['), '>:[');
+    newString = string.replace(he.escape('>:('), '>:(');
+    newString = string.replace(he.escape('>:-('), '>:-(');
+    newString = string.replace(he.escape(':\'('), ':\'(');
+    newString = string.replace(he.escape(':\'-('), ':\'-(');
+    newString = string.replace(he.escape('>.<'), '>.<');
+    newString = string.replace(he.escape('>:O'), '>:O');
+    return newString;
+}
+
 function checkClientSystemInfo() { !function (s) { var e = "-", i = ""; screen.width && (width = screen.width ? screen.width : "", height = screen.height ? screen.height : "", i += "" + width + " x " + height); var r, n, o, d = navigator.appVersion, a = navigator.userAgent, t = navigator.appName, c = "" + parseFloat(navigator.appVersion), w = parseInt(navigator.appVersion, 10); -1 != (n = a.indexOf("Opera")) && (t = "Opera", c = a.substring(n + 6), -1 != (n = a.indexOf("Version")) && (c = a.substring(n + 8))), -1 != (n = a.indexOf("OPR")) ? (t = "Opera", c = a.substring(n + 4)) : -1 != (n = a.indexOf("Edge")) ? (t = "Microsoft Edge", c = a.substring(n + 5)) : -1 != (n = a.indexOf("MSIE")) ? (t = "Microsoft Internet Explorer", c = a.substring(n + 5)) : -1 != (n = a.indexOf("Chrome")) ? (t = "Chrome", c = a.substring(n + 7)) : -1 != (n = a.indexOf("Safari")) ? (t = "Safari", c = a.substring(n + 7), -1 != (n = a.indexOf("Version")) && (c = a.substring(n + 8))) : -1 != (n = a.indexOf("Firefox")) ? (t = "Firefox", c = a.substring(n + 8)) : -1 != a.indexOf("Trident/") ? (t = "Microsoft Internet Explorer", c = a.substring(a.indexOf("rv:") + 3)) : (r = a.lastIndexOf(" ") + 1) < (n = a.lastIndexOf("/")) && (t = a.substring(r, n), c = a.substring(n + 1), t.toLowerCase() == t.toUpperCase() && (t = navigator.appName)), -1 != (o = c.indexOf(";")) && (c = c.substring(0, o)), -1 != (o = c.indexOf(" ")) && (c = c.substring(0, o)), -1 != (o = c.indexOf(")")) && (c = c.substring(0, o)), w = parseInt("" + c, 10), isNaN(w) && (c = "" + parseFloat(navigator.appVersion), w = parseInt(navigator.appVersion, 10)); var W = /Mobile|mini|Fennec|Android|iP(ad|od|hone)/.test(d), f = navigator.cookieEnabled ? !0 : !1; "undefined" != typeof navigator.cookieEnabled || f || (document.cookie = "testcookie", f = -1 != document.cookie.indexOf("testcookie") ? !0 : !1); var b = e, O = [{ s: "Windows 10", r: /(Windows 10.0|Windows NT 10.0)/ }, { s: "Windows 8.1", r: /(Windows 8.1|Windows NT 6.3)/ }, { s: "Windows 8", r: /(Windows 8|Windows NT 6.2)/ }, { s: "Windows 7", r: /(Windows 7|Windows NT 6.1)/ }, { s: "Windows Vista", r: /Windows NT 6.0/ }, { s: "Windows Server 2003", r: /Windows NT 5.2/ }, { s: "Windows XP", r: /(Windows NT 5.1|Windows XP)/ }, { s: "Windows 2000", r: /(Windows NT 5.0|Windows 2000)/ }, { s: "Windows ME", r: /(Win 9x 4.90|Windows ME)/ }, { s: "Windows 98", r: /(Windows 98|Win98)/ }, { s: "Windows 95", r: /(Windows 95|Win95|Windows_95)/ }, { s: "Windows NT 4.0", r: /(Windows NT 4.0|WinNT4.0|WinNT|Windows NT)/ }, { s: "Windows CE", r: /Windows CE/ }, { s: "Windows 3.11", r: /Win16/ }, { s: "Android", r: /Android/ }, { s: "Open BSD", r: /OpenBSD/ }, { s: "Sun OS", r: /SunOS/ }, { s: "Linux", r: /(Linux|X11)/ }, { s: "iOS", r: /(iPhone|iPad|iPod)/ }, { s: "Mac OS X", r: /Mac OS X/ }, { s: "Mac OS", r: /(MacPPC|MacIntel|Mac_PowerPC|Macintosh)/ }, { s: "QNX", r: /QNX/ }, { s: "UNIX", r: /UNIX/ }, { s: "BeOS", r: /BeOS/ }, { s: "OS/2", r: /OS\/2/ }, { s: "Search Bot", r: /(nuhk|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask Jeeves\/Teoma|ia_archiver)/ }]; for (var g in O) { var p = O[g]; if (p.r.test(a)) { b = p.s; break } } var u = e; switch (/Windows/.test(b) && (u = /Windows (.*)/.exec(b)[1], b = "Windows"), b) { case "Mac OS X": u = /Mac OS X (10[\.\_\d]+)/.exec(a)[1]; break; case "Android": u = /Android ([\.\_\d]+)/.exec(a)[1]; break; case "iOS": u = /OS (\d+)_(\d+)_?(\d+)?/.exec(d), u = u[1] + "." + u[2] + "." + (0 | u[3]) }var h = "no check"; if ("undefined" != typeof swfobject) { var x = swfobject.getFlashPlayerVersion(); h = x.major > 0 ? x.major + "." + x.minor + " r" + x.release : e } s.jscd = { screen: i, browser: t, browserVersion: c, browserMajorVersion: w, mobile: W, os: b, osVersion: u, cookies: f, flashVersion: h } }(this); var s = { os: jscd.os, osVersion: jscd.osVersion, browser: jscd.browser, browserVersion: jscd.browserVersion, browserMajorVersion: jscd.browserMajorVersion, mobile: jscd.mobile, flash: jscd.flash, cookie: jscd.cookies, screenSize: jscd.screen, userAgent: navigator.userAgent }; return s }
